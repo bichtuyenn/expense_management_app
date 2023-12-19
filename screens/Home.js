@@ -2,7 +2,7 @@ import {View, Text , StyleSheet, SafeAreaView, FlatList, ScrollView} from 'react
 import CalendarPicker from 'react-native-calendar-picker';
 import React, { useState, useEffect } from 'react';
 import { PieChart } from 'react-native-chart-kit';
-import Activities from './Activities';
+import Chart from './Chart';
 
 const Home = ({ route }) => {
     const [selectedtDate, setSelectedDate] = useState(new Date());
@@ -79,13 +79,6 @@ const Home = ({ route }) => {
               <Text>Chi tiêu: {calculateTotalExpense()} đ</Text>
               <Text>Số dư: {calculateTotalIncome() - calculateTotalExpense()} đ</Text>
           </View>
-          <View>
-              <Text>Total Food Expense: {totalFoodExpense} đ</Text>
-              <Text>Total Rent Expense: {totalRentExpense} đ</Text>
-              <Text>Total Shopping Expense: {totalShoppingExpense} đ</Text>
-              <Text>Total Entertainment Expense: {totalEntertainmentExpense} đ</Text>
-              <Text>Total Transportation Expense: {totalTransportExpense} đ</Text>
-          </View>
           
           <View style={styles.horizontalLine} />
 
@@ -98,8 +91,8 @@ const Home = ({ route }) => {
                     <View key={index}>
                       <Text>- {parseFloat(expense.number || 0)} </Text>
                       <Text>  {expense.day} </Text>
-                      <Text>  {expense.text} </Text>
                       <Text>  {expense.category} </Text> 
+                      <Text>  {expense.text} </Text>
                     </View>
                   ))}
               </>
@@ -124,7 +117,7 @@ const Home = ({ route }) => {
                 ) : (
                   <Text>No income</Text>
                 )}
-                 <Activities expenses={expenses} />
+                 <Chart expenses={expenses} />
               </View>
           </View>
        </View>
