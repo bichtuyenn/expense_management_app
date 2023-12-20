@@ -3,7 +3,7 @@ import CalendarPicker from 'react-native-calendar-picker';
 import React, { useState, useEffect } from 'react';
 import { PieChart } from 'react-native-chart-kit';
 import Chart from './Chart';
-// import ChartIncome from './ChartIncome';
+import ChartIncome from './ChartIncome';
 
 const Home = ({ route }) => {
     const [selectedtDate, setSelectedDate] = useState(new Date());
@@ -132,7 +132,7 @@ const totalInvestment = calculateTotalIncomeByCategory('Investment money');
                 <Text>salary: {totalSalary}</Text>
                 <Text>allowance : {totalAllowance}</Text>
                  <Chart expenses={expenses} />
-                 {/* <ChartIncome income={income} /> */}
+                 <ChartIncome income={income} />
               </View>
           </View>
        </View>
