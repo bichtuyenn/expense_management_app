@@ -1,9 +1,7 @@
-
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { PieChart } from 'react-native-chart-kit';
 import { Dimensions } from 'react-native';
-//import PieChart from './PieChart';
 
 const defaultColors = {
   Food: "#F00",
@@ -15,43 +13,58 @@ const defaultColors = {
 
 const Chart = ({ expenses }) => {
   const screenWidth = Dimensions.get('window').width;
-
-  if (!expenses || expenses.length === 0) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <View>
-          <PieChart
-            data={[]}
-            width={screenWidth}
-            height={220}
-            chartConfig={{
-              color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-            }}
-            accessor={"population"}
-            backgroundColor={"transparent"}
-            // paddingLeft={"15"}
-          />
-        </View>
-      </SafeAreaView>
-    );
-  }
+  const [data, setData] = useState([]);
 
   const calculateTotalExpenseByCategory = (category) => {
-    return expenses.reduce((total, expense) => {
+    const existingData = data.find((expense) => expense.name === category);
+    const newTotalExpense = expenses.reduce((total, expense) => {
       if (expense.category === category) {
         return total + parseFloat(expense.number || 0);
       }
       return total;
     }, 0);
+
+    if (existingData) {
+      existingData.population = newTotalExpense;
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          name: category,
+          population: newTotalExpense,
+          color: defaultColors[category] || "#000000",
+          legendFontColor: "#7F7F7F",
+          legendFontSize: 15,
+        },
+      ]);
+    }
+
+    return newTotalExpense;
   };
 
-  const data = expenses.map((expense) => ({
-    name: expense.category,
-    population: calculateTotalExpenseByCategory(expense.category),
-    color: expense.color || defaultColors[expense.category] || "#000000",
-    legendFontColor: "#7F7F7F",
-    legendFontSize: 15,
-  }));
+  useEffect(() => {
+    if (expenses && expenses.length > 0) {
+      setData((prevData) => {
+        const newData = expenses.reduce((acc, expense) => {
+          const existingData = acc.find((d) => d.name === expense.category);
+          if (existingData) {
+            existingData.population = calculateTotalExpenseByCategory(expense.category);
+          } else {
+            acc.push({
+              name: expense.category,
+              population: calculateTotalExpenseByCategory(expense.category),
+              color: expense.color || defaultColors[expense.category] || "#000000",
+              legendFontColor: "#7F7F7F",
+              legendFontSize: 15,
+            });
+          }
+          return acc;
+        }, [...prevData]);
+
+        return newData;
+      });
+    }
+  }, [expenses]);
 
   const chartConfig = {
     backgroundGradientFrom: '#1E2923',
@@ -74,7 +87,6 @@ const Chart = ({ expenses }) => {
           chartConfig={chartConfig}
           accessor={"population"}
           backgroundColor={"transparent"}
-          //paddingLeft={"15"}
         />
       </View>
     </SafeAreaView>

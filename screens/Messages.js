@@ -61,8 +61,7 @@ import CalendarPicker from 'react-native-calendar-picker';
         setText('');
         navigation.navigate('Home', { expenses: [...expenses, newExpense] });
       }
-      
-
+    
       const nav = useNavigation();
       useFocusEffect(() => {
         setIsChatSelected(true);

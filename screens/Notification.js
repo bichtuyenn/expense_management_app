@@ -23,7 +23,7 @@ const Notification = ({ navigation }) => {
       Alert.alert('Please type your income!');
       return;
     }
-    const newIncome = { numberIncome, note, day, incomeCategory};
+    const newIncome = { numberIncome, note, day, incomeCategory };
     setIncome([...income, newIncome]);
     setNumberIncome('');
     setNote('');
@@ -39,6 +39,7 @@ const Notification = ({ navigation }) => {
 useEffect(() => {
   setSelectedIncomeDate(new Date());
 }, []);
+
 const onDateChange = (date, type) => {
   if (type === 'DATE_NOW') {
     return;
@@ -60,7 +61,6 @@ const renderItem = ({ item }) => (
     <Text style={styles.categoryText}>{item}</Text>
   </TouchableOpacity>
 );
-
   return (
   <ScrollView>
     <View style={styles.container}>
