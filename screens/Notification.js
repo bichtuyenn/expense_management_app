@@ -54,7 +54,7 @@ const handleCategoryPress = (category) => {
 };
 const renderItem = ({ item }) => (
   <TouchableOpacity
-    style={[styles.categoryItem, item === incomeCategory ? styles.incomeCategoryItem : {}]}
+    style={[styles.categoryItem, item === incomeCategory ? styles.selectedCategoryItem : {}]}
     onPress={() => handleCategoryPress(item)}
   >
     <Text style={styles.categoryText}>{item}</Text>
