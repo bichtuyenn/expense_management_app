@@ -6,6 +6,12 @@ import { Button } from 'react-native-paper';
 import CalendarPicker from 'react-native-calendar-picker';
 import { Dropdown } from 'react-native-element-dropdown';
 
+const data = [
+  { label: 'Salary', value: '0' },
+  { label: 'Allowance', value: '0' },
+  { label: 'Bonus', value: '0'},
+  { label: 'Investment money', value: '0' },
+];
 const Notification = ({ navigation }) => {
   const [isChatSelected, setIsChatSelected] = useState(false);
   const [isNotificationSelected, setIsNotificationSelected] = useState(true);
@@ -13,9 +19,7 @@ const Notification = ({ navigation }) => {
   const [numberIncome, setNumberIncome] = React.useState('');
   const [note,  setNote] = React.useState('');
   const [income, setIncome] =useState([]);
-  const [incomeCategory, setIncomeCategory] = useState('Salary');
-  const [incomeCategoryIndex, setIncomeCategoryIndex] = useState(0);
-  const predefinedIncomeCategories = ['Salary', 'Allowance', 'Bonus', 'Investment money'];
+  const [incomeCategory, setIncomeCategory] = useState(data[0].label);
   const [selectedIncomeDate, setSelectedIncomeDate] = useState(new Date());
 
   const handleSubmitIncome = () => {
@@ -49,7 +53,11 @@ const onDateChange = (date, type) => {
     setDay(selectedIncomeDate.toDateString());
   }
 };
+const handleDropdownFocus = () => {
+};
 
+const handleDropdownBlur = () => {
+};
 const handleCategoryPress = (category) => {
   setIncomeCategory(category);
 };
@@ -130,11 +138,7 @@ const renderItem = ({ item }) => (
                   />
         </View>
         <View style = {styles.expense}>
-            <Feather
-                name="card-outline"
-                color="grey"
-                size={20}
-            />
+            <Text style={styles.text}>Expense money</Text>
             <TextInput
                 placeholder='0'
                 value={numberIncome}
@@ -142,25 +146,12 @@ const renderItem = ({ item }) => (
                 onChangeText={(numberIncome) => setNumberIncome(numberIncome)}
                 keyboardType='numeric'
             />
-            <Text>đ</Text>
         </View>
         <View style={styles.expense}>
-            <Feather
-                name="today-outline"
-                color="grey"
-                size={20}
-            />
-                        <Feather
-                name="chevron-back-outline"
-                color="grey"
-                size={20}
-            />
-            <Text style= {styles.dateTimeNow & styles.input} >{day}</Text>
-            <Feather
-                name="chevron-forward-outline"
-                color="grey"
-                size={20}
-            />
+            <Text style={styles.text}>Date</Text>
+            <View>
+                <Text style={[styles.dateTimeNow, styles.input]}>{day}</Text>
+            </View>
         </View>
         <View style={styles.expense}>
             <Text style={styles.text}>Note</Text>
@@ -171,9 +162,8 @@ const renderItem = ({ item }) => (
                   style= {styles.input}
             />
         </View>
-        <Text style = {{fontSize: 18}}>Category</Text>
         <View style={styles.categoryContainer}>
-            <FlatList
+            {/* <FlatList
                   data={predefinedIncomeCategories}
                   renderItem={renderItem}
                   keyExtractor={(item) => item}
@@ -183,7 +173,21 @@ const renderItem = ({ item }) => (
                   getItemLayout={(data, index) => (
                   { length: 100, offset: 100 * index, index }
                   )}
-            />
+            /> */}
+                <Text style= {{fontSize : 18, marginRight: 8}}>Category</Text>
+                <Dropdown
+                  style={styles.dropdown}
+                  data={data}
+                  labelField="label"
+                  valueField="value"
+                  placeholder={incomeCategory}
+                  label={incomeCategory}
+                  onFocus={handleDropdownFocus}
+                  onBlur={handleDropdownBlur}
+                  onChange={(item) => {
+                    setIncomeCategory(item.label);
+                  }}
+                />
         </View>
     </View>
     ) : null}
@@ -275,9 +279,10 @@ const styles = StyleSheet.create({
       backgroundColor: '#ffffff'
   },
   expense: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      marginBottom: 5,
+    flexDirection: 'row',
+    alignContent: 'center',
+    alignItems: 'center',
+    marginBottom: 5,
   },
   text:{
     marginRight: 10,
@@ -345,7 +350,14 @@ const styles = StyleSheet.create({
   arrowButton: {
     padding: 10,
   },
-
+  dropdown: {
+    width: 150,
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 0.5,
+    borderRadius: 8,
+    paddingHorizontal: 8,
+  },
 
 });
 
