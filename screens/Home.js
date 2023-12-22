@@ -5,6 +5,8 @@ import { PieChart } from 'react-native-chart-kit';
 import Chart from './Chart';
 import ChartIncome from './ChartIncome';
 
+
+
 const Home = ({ route }) => {
     const [selectedtDate, setSelectedDate] = useState(new Date());
     const [expenses, setExpenses] = useState([]);
@@ -62,7 +64,7 @@ const totalInvestment = calculateTotalIncomeByCategory('Investment money');
     const totalRentExpense = calculateTotalExpenseByCategory('Rent');
     const totalShoppingExpense = calculateTotalExpenseByCategory('Shopping');
     const totalEntertainmentExpense = calculateTotalExpenseByCategory('Entertainment');
-    const totalTransportExpense = calculateTotalExpenseByCategory('Transportation');
+    const totalTransportExpense = calculateTotalExpenseByCategory('Transport');
 
     const calculateTotalExpense = () => {
       let totalExpense = 0;
@@ -80,96 +82,151 @@ const totalInvestment = calculateTotalIncomeByCategory('Investment money');
     }, [route.params]);
 
     return (
-      <ScrollView>
-      <SafeAreaView style={styles.container}>
-        <View style={styles.container}>
-          <Text style={styles.titleStyle}>EXPENSE MANAGERMENT</Text>
-          <View style={styles.horizontalLine} />
-          <View style={styles.expenseMangager}>
-              <Text>Thu nhập: {calculateTotalIncome()} đ </Text>
-              <Text>Chi tiêu: {calculateTotalExpense()} đ</Text>
-              <Text>Số dư: {calculateTotalIncome() - calculateTotalExpense()} đ</Text>
-          </View>
-          
-          <View style={styles.horizontalLine} />
+<ScrollView>
+<SafeAreaView style={styles.container}>
+  <View style={styles.container}>
+    <Text style={styles.titleStyle}>EXPENSE MANAGEMENT</Text>
+    <View style={styles.horizontalLine} />
 
-          <View style= {styles.expenseDetail}>
-            <Text>Chi tiêu: </Text>
-            <View style={styles.expenseDetail}>
-            {expenses.length > 0 ? (
-              <>
-                  {expenses.map((expense, index) => (
-                    <View key={index}>
-                      <Text>- {parseFloat(expense.number || 0)} </Text>
-                      <Text>  {expense.day} </Text>
-                      <Text>  {expense.category} </Text> 
-                      <Text>  {expense.text} </Text>
-                    </View>
-                  ))}
-              </>
-            ) : (
-              <Text>No expenses</Text>
-            )}
-          </View>
-
-          <View style= {styles.expenseDetail}>
-              <Text>Thu nhập: </Text>
-              <View style={styles.expenseDetail}>
-                {income.length > 0 ? (
-                  <>
-                    {income.map((income, index) => (
-                      <View key={index}>
-                          <Text>+ {parseFloat(income.numberIncome || 0)} đ </Text>
-                          <Text>  {income.day} </Text>
-                          <Text>  {income.incomeCategory} </Text>
-                          <Text>  {income.note} </Text>
-                      </View>
-                      ))}
-                  </>
-                ) : (
-                  <Text>No income</Text>
-                )}
-                <Text>salary: {totalSalary}</Text>
-                <Text>allowance : {totalAllowance}</Text>
-                 <Chart expenses={expenses} />
-                 <ChartIncome income={income} />
-              </View>
-          </View>
-       </View>
+    <View style={styles.rowContainer}>
+      <Text style={styles.label}>Thu nhập:</Text>
+      <Text style={styles.value}>{calculateTotalIncome()} đ</Text>
     </View>
-  </SafeAreaView>
+
+    <View style={styles.rowContainer}>
+      <Text style={styles.label}>Chi tiêu:</Text>
+      <Text style={styles.value}>{calculateTotalExpense()} đ</Text>
+    </View>
+
+    <View style={styles.rowContainer}>
+      <Text style={styles.label}>Số dư:</Text>
+      <Text style={styles.value}>
+        {calculateTotalIncome() - calculateTotalExpense()} đ
+      </Text>
+    </View>
+
+    <View style={styles.horizontalLine} />
+
+    <View style={styles.expenseDetail}>
+      <Text style={styles.expenseHeader}>Chi tiêu</Text>
+      {expenses.length > 0 ? (
+        <>
+          {expenses.map((expense, index) => (
+            <View key={index} style={styles.expenseRow}>
+              <Text style={styles.expenseCategory}>
+                {expense.category}
+              </Text>
+              <View style={styles.expenseDetails}>
+                <Text>{expense.day}</Text>
+                <Text>{parseFloat(expense.number || 0)}</Text>
+                <Text>{expense.text}</Text>
+              </View>
+              {index < expenses.length - 1 && (
+                <View style={styles.divider} />
+              )}
+            </View>
+          ))}
+        </>
+      ) : (
+        <Text>No expenses</Text>
+      )}
+    </View>
+
+    <View style={styles.expenseDetail}>
+      <Text style={styles.expenseHeader}>Thu nhập</Text>
+      {income.length > 0 ? (
+        <>
+          {income.map((income, index) => (
+            <View key={index} style={styles.expenseRow}>
+              <Text style={styles.expenseCategory}>{income.note}</Text>
+              <View style={styles.expenseDetails}>
+                <Text>{income.day}</Text>
+                <Text>{parseFloat(income.numberIncome || 0)}</Text>
+              </View>
+              {index < income.length - 1 && (
+                <View style={styles.divider} />
+              )}
+            </View>
+          ))}
+        </>
+      ) : (
+        <Text>No income</Text>
+      )}
+    </View>
+
+    <View style={styles.chartContainer}>
+        <Chart expenses={expenses} />
+        <ChartIncome income={income} />
+    </View>
+  </View>
+</SafeAreaView>
 </ScrollView>
-      
-    );
-  };
+);
+};
 
-
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#ffffff',
-      padding: 16,
-    },
-    titleStyle: {
-      textAlign: 'center',
-      fontSize: 20,
-      marginBottom:20,
-    },
-    horizontalLine:{
-        height: 1,
-        backgroundColor: '#ccc',
-        marginVertical: 10,
-    },
-    expenseMangager:{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginTop: 10, 
-    },
-    expenseDetail: {
-      marginTop: 10,
-      backgroundColor: '#B2C8BA',
-
+const styles = StyleSheet.create({
+container: {
+flex: 1,
+backgroundColor: '#ffffff',
+padding: 16,
+},
+titleStyle: {
+textAlign: 'center',
+fontSize: 20,
+marginBottom: 20,
+},
+horizontalLine: {
+height: 1,
+backgroundColor: '#ccc',
+marginVertical: 10,
+},
+rowContainer: {
+flexDirection: 'row',
+justifyContent: 'space-between',
+marginTop: 10,
+},
+label: {
+fontWeight: 'bold',
+},
+value: {
+color: 'green',
+},
+expenseDetail: {
+marginTop: 10,
+backgroundColor: '#B2C8BA',
+padding: 10,
+},
+expenseHeader: {
+fontWeight: 'bold',
+fontSize: 16,
+marginBottom: 5,
+},
+expenseRow: {
+flexDirection: 'row',
+justifyContent: 'space-between',
+alignItems: 'center',
+marginBottom: 5,
+},
+expenseCategory: {
+flex: 1,
+marginRight: 5,
+},
+expenseDetails: {
+flex: 1,
+flexDirection: 'column',
+marginLeft: 5,
+},
+divider: {
+height: 1,
+backgroundColor: '#ccc',
+marginVertical: 5,
+},
+chartContainer: {
+marginTop: 10,
+backgroundColor: 'white',
+borderRadius: 10,
+width: '100%',
+alignSelf: 'center',
     }
-  });
-
+});
 export default Home;

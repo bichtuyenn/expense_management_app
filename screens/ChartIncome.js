@@ -107,7 +107,7 @@ const ChartIncome = ({ income }) => {
           height={220}
           chartConfig={chartConfig}
           accessor={"population"}
-          backgroundColor={"transparent"}
+          backgroundColor={"#FFFFFF"}
         />
       </View>
     </SafeAreaView>

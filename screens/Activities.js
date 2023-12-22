@@ -98,10 +98,10 @@ const Activities = () => {
           />
         )}
       />
-
-      <Button title="Convert" onPress={convertCurrency} />
+      <Text style= {styles.trong}></Text>
+      <Button title="Convert" onPress={convertCurrency} style={styles.button}/>
       {convertedAmount && (
-        <Text>
+        <Text style= {styles.trong}>
           {amount} {value} is equal to {convertedAmount} {value2}
         </Text>
       )}
@@ -122,7 +122,8 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 0.5,
     borderRadius: 8,
-    paddingHorizontal: 8
+    paddingHorizontal: 8,
+    
   },
   icon: {
     marginRight: 5
@@ -149,8 +150,13 @@ const styles = StyleSheet.create({
   inputSearchStyle: {
     height: 40,
     fontSize: 16
+  },
+  button: {
+    marginTop: 20
+  },
+  trong:{
+    marginTop: 5
   }
 });
 
 export default Activities;
-

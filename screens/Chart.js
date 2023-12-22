@@ -5,7 +5,7 @@ import { Dimensions } from 'react-native';
 
 const defaultColors = {
   Food: "#F00",
-  Transportation: "#FFF7D4",
+  Transport: "#FFF7D4",
   Entertainment: "red",
   Shopping: "#E26EE5",
   Rent: "#508D69",

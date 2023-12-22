@@ -4,7 +4,7 @@ import { useNavigation , useFocusEffect} from '@react-navigation/native';
 import Feather from 'react-native-vector-icons/Ionicons';
 import { Button } from 'react-native-paper';
 import CalendarPicker from 'react-native-calendar-picker';
-
+import { Dropdown } from 'react-native-element-dropdown';
 
 const Notification = ({ navigation }) => {
   const [isChatSelected, setIsChatSelected] = useState(false);
@@ -27,7 +27,7 @@ const Notification = ({ navigation }) => {
     setIncome([...income, newIncome]);
     setNumberIncome('');
     setNote('');
-    navigation.navigate('Home', {income: [...income, newIncome]});
+    navigation.navigate('Home', {income: [ newIncome, ...income]});
   }
 
   const nav = useNavigation();
@@ -76,7 +76,7 @@ const renderItem = ({ item }) => (
             navigation.navigate('Messages');
           }}
         >
-          <Text style={[styles.buttonText, isChatSelected ? styles.selectedText : {}]}>Chi tiêu</Text>
+          <Text style={[styles.buttonText, isChatSelected ? styles.selectedText : {}]}>Expense</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -89,7 +89,7 @@ const renderItem = ({ item }) => (
             setIsNotificationSelected(true);
           }}
         >
-          <Text style={[styles.buttonText, isNotificationSelected ? styles.selectedText : {}]}>Thu nhập</Text>
+          <Text style={[styles.buttonText, isNotificationSelected ? styles.selectedText : {}]}>Income</Text>
         </TouchableOpacity>
       </View>
       
@@ -126,7 +126,6 @@ const renderItem = ({ item }) => (
                       color: '#000000',
                     }}
                     selected={selectedIncomeDate}
-                    // onDateChange={(date) => setSelectedDate(date)}
                     onDateChange={onDateChange}
                   />
         </View>
@@ -164,7 +163,7 @@ const renderItem = ({ item }) => (
             />
         </View>
         <View style={styles.expense}>
-            <Text style={styles.text}>Ghi chú</Text>
+            <Text style={styles.text}>Note</Text>
             <TextInput
                   placeholder='Typing note'
                   value={note}
@@ -172,9 +171,7 @@ const renderItem = ({ item }) => (
                   style= {styles.input}
             />
         </View>
-        <View>
-                <Text>Danh mục</Text>
-        </View>
+        <Text style = {{fontSize: 18}}>Category</Text>
         <View style={styles.categoryContainer}>
             <FlatList
                   data={predefinedIncomeCategories}
@@ -194,7 +191,7 @@ const renderItem = ({ item }) => (
           labelStyle={{ color: '#ffffff' }}
           style= {styles.buttonAdd}
           onPress={handleSubmitIncome} 
-          >Nhập thu nhập</Button>
+          >Enter the income</Button>
   </View>
 </ScrollView>
   );
@@ -257,7 +254,7 @@ const styles = StyleSheet.create({
   },
   addContainer: {
       flex:1,
-      backgroundColor:"#B4B4B3"
+      backgroundColor:"#B4B4B3",
   },
   icon:{
       borderRadius: 20,
@@ -268,12 +265,13 @@ const styles = StyleSheet.create({
       padding: 7,
       backgroundColor: '#B4B4B3',
       borderRadius: 10,
+      fontSize: 17
   },
   addContainer: {
       padding: 10,
       borderRadius: 10,
-      marginLeft: 20,
-      marginRight: 20,
+      marginLeft: 5,
+      marginRight: 5,
       backgroundColor: '#ffffff'
   },
   expense: {
@@ -283,9 +281,11 @@ const styles = StyleSheet.create({
   },
   text:{
     marginRight: 10,
+    fontSize: 17
   },
   input:{
-    textAlign: 'center'
+    textAlign: 'center',
+    fontSize: 17
   },
   buttonAdd:{
     backgroundColor: '#00A9FF',
@@ -294,9 +294,10 @@ const styles = StyleSheet.create({
     marginRight: 20,
     padding: 2,
     borderRadius: 15,
+    fontSize: 17
   },
   flatListContainer: {
-    marginTop: 10, // Khoảng cách giữa FlatList và phần trên nó
+    marginTop: 10, 
   },
 
   categoryItem: {
@@ -311,7 +312,7 @@ const styles = StyleSheet.create({
   },
 
   categoryText: {
-    fontSize: 16,
+    fontSize: 17,
   },
   flatList: {
     marginTop: 10,
@@ -347,5 +348,6 @@ const styles = StyleSheet.create({
 
 
 });
+
 
 export default Notification;
