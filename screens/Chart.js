@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { PieChart } from 'react-native-chart-kit';
 import { Dimensions } from 'react-native';
+import axios from 'axios';
+import { AuthContext } from './AuthContext';
 
 const defaultColors = {
   Food: "#F00",
@@ -11,23 +13,23 @@ const defaultColors = {
   Rent: "#508D69",
 };
 
-const Chart = ({ expenses }) => {
-  const screenWidth = Dimensions.get('window').width;
+const Chart = ({expenses}) => {
   const [data, setData] = useState([]);
+  const screenWidth = Dimensions.get('window').width;
 
   const calculateTotalExpenseByCategory = (category) => {
-    const existingData = data.find((expense) => expense.name === category);
-    const newTotalExpense = expenses.reduce((total, expense) => {
-      if (expense.category === category) {
-        return total + parseFloat(expense.number || 0);
-      }
-      return total;
-    }, 0);
-
-    if (existingData) {
-      existingData.population = newTotalExpense;
+    const newTotalExpense = expenses
+      .filter(expense => expense.categoriesExpenses === category)
+      .reduce((total, expense) => total + parseFloat(expense.value || 0), 0);
+    const existingDataIndex = data.findIndex((expense) => expense.name === category);
+    if (existingDataIndex !== -1) {
+      setData(prevData => {
+        const newData = [...prevData];
+        newData[existingDataIndex].population = newTotalExpense;
+        return newData;
+      });
     } else {
-      setData((prevData) => [
+      setData(prevData => [
         ...prevData,
         {
           name: category,
@@ -39,31 +41,36 @@ const Chart = ({ expenses }) => {
       ]);
     }
 
+    // console.log("newTotalExpense", newTotalExpense);
     return newTotalExpense;
   };
-
   useEffect(() => {
+    // setData([]);
     if (expenses && expenses.length > 0) {
-      setData((prevData) => {
+      setData(prevData => {
         const newData = expenses.reduce((acc, expense) => {
-          const existingData = acc.find((d) => d.name === expense.category);
-          if (existingData) {
-            existingData.population = calculateTotalExpenseByCategory(expense.category);
+          const existingDataIndex = acc.findIndex((d) => d.name === expense.categoriesExpenses);
+
+          if (existingDataIndex !== -1) {
+            acc[existingDataIndex].population = calculateTotalExpenseByCategory(expense.categoriesExpenses);
           } else {
-            acc.push({
-              name: expense.category,
-              population: calculateTotalExpenseByCategory(expense.category),
-              color: expense.color || defaultColors[expense.category] || "#000000",
+            const newCategoryData = {
+              name: expense.categoriesExpenses,
+              population: calculateTotalExpenseByCategory(expense.categoriesExpenses),
+              color: expense.color || defaultColors[expense.categoriesExpenses] || "#000000",
               legendFontColor: "#7F7F7F",
               legendFontSize: 15,
-            });
+            };
+            acc.push(newCategoryData);
           }
           return acc;
-        }, [...prevData]);
-
+        }, []);
+        console.log("newDataExpense", newData);
         return newData;
       });
     }
+    // console.log("dataExpense", data);
+    
   }, [expenses]);
 
   const chartConfig = {

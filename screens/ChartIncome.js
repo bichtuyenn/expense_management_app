@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react';
+
+import React, { useEffect, useState, useContext } from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { PieChart } from 'react-native-chart-kit';
 import { Dimensions } from 'react-native';
+import axios from 'axios';
 
 const defaultColors = {
   Salary: "#7D0A0A",
@@ -10,50 +12,23 @@ const defaultColors = {
   'Investment money': "#E26EE5",
 };
 
-const ChartIncome = ({ income }) => {
-  const screenWidth = Dimensions.get('window').width;
+const ChartIncome = ({incomes}) => {
   const [data, setData] = useState([]);
-
-  
-  useEffect(() => {
-    if (income && income.length > 0) {
-      setData((prevData) => {
-        const newData = income.reduce((acc, item) => {
-          const existingData = acc.find((d) => d.name === item.incomeCategory);
-          if (existingData) {
-            population = calculateTotalIncomeByCategory(item.incomeCategory);
-          } else {
-            acc.push({
-              name: item.incomeCategory,
-              population: calculateTotalIncomeByCategory(item.incomeCategory),
-              color: item.color || defaultColors[item.incomeCategory] || "#000000",
-              legendFontColor: "#7F7F7F",
-              legendFontSize: 15,
-            });
-          }
-          return acc;
-        }, [...prevData]);
-
-        return newData;
-      });
-    }
-  }, [income]);
-
-  
+  const screenWidth = Dimensions.get('window').width;
 
   const calculateTotalIncomeByCategory = (category) => {
-    const existingData = data.find((item) => item.name === category);
-    const newTotalIncome = income.reduce((total, item) => {
-      if (item.incomeCategory === category) {
-        return total + parseFloat(item.numberIncome || 0);
-      }
-      return total;
-    }, 0);
-
-    if (existingData) {
-      existingData.population = newTotalIncome;
+    const newTotalIncome = incomes
+      .filter(income => income.categoriesIncome === category)
+      .reduce((total, income) => total + parseFloat(income.value || 0), 0);
+    const existingDataIndex = data.findIndex((income) => income.name === category);
+    if (existingDataIndex !== -1) {
+      setData(prevData => {
+        const newData = [...prevData];
+        newData[existingDataIndex].population = newTotalIncome;
+        return newData;
+      });
     } else {
-      setData((prevData) => [
+      setData(prevData => [
         ...prevData,
         {
           name: category,
@@ -65,8 +40,37 @@ const ChartIncome = ({ income }) => {
       ]);
     }
 
+    // console.log("newTotalIncome", newTotalIncome);
     return newTotalIncome;
   };
+  useEffect(() => {
+    // setData([]);
+    if (incomes && incomes.length > 0) {
+      setData(prevData => {
+        const newData = incomes.reduce((acc, income) => {
+          const existingDataIndex = acc.findIndex((d) => d.name === income.categoriesIncome);
+
+          if (existingDataIndex !== -1) {
+            acc[existingDataIndex].population = calculateTotalIncomeByCategory(income.categoriesIncome);
+          } else {
+            const newCategoryData = {
+              name: income.categoriesIncome,
+              population: calculateTotalIncomeByCategory(income.categoriesIncome),
+              color: income.color || defaultColors[income.categoriesIncome] || "#000000",
+              legendFontColor: "#7F7F7F",
+              legendFontSize: 15,
+            };
+            acc.push(newCategoryData);
+          }
+          return acc;
+        }, []);
+        console.log("newDataIncome", newData);
+        return newData;
+      });
+    }
+    // console.log("dataIncome", data);
+    
+  }, [incomes]);
 
   const chartConfig = {
     backgroundGradientFrom: '#1E2923',
@@ -78,25 +82,6 @@ const ChartIncome = ({ income }) => {
     barPercentage: 0.5,
     useShadowColorFromDataset: false,
   };
-
-  if (!income || income.length === 0) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <View>
-          <PieChart
-            data={[]}
-            width={screenWidth}
-            height={220}
-            chartConfig={{
-              color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-            }}
-            accessor={"population"}
-            backgroundColor={"#FFFFFF"}
-          />
-        </View>
-      </SafeAreaView>
-    );
-  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -123,4 +108,3 @@ const styles = StyleSheet.create({
 });
 
 export default ChartIncome;
-

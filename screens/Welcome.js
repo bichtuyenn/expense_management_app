@@ -18,7 +18,7 @@ const Welcome = ({navigation}) => {
 
     return (
       <View style={styles.container}>
-          <StatusBar backgroundColor='#00A9FF' barStyle="light-content"/>
+          <StatusBar backgroundColor='#79AC78' barStyle="light-content"/>
         <View style={styles.header}>
             <Animatable.Image 
             animation="bounceIn"
@@ -41,7 +41,7 @@ const Welcome = ({navigation}) => {
             <View style={styles.button}>
             <TouchableOpacity onPress={()=>navigation.navigate('Login')}>
                 <LinearGradient
-                    colors={['#A0E9FF', '#00A9FF']}
+                    colors={['#AFC8AD', '#88AB8E']}
                     style={styles.signIn}
                 >
                     <Text style={styles.textSign}>Get Started</Text>
@@ -66,7 +66,7 @@ const height_logo = height * 0.28;
 const styles = StyleSheet.create({
   container: {
     flex: 1, 
-    backgroundColor: '#00A9FF'
+    backgroundColor: '#88AB8E'
   },
   header: {
       flex: 2,

@@ -1,11 +1,13 @@
-import React,{useState,  useEffect} from 'react';
+import React,{useState,  useEffect, useContext} from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, FlatList,Alert, ScrollView } from 'react-native';
 import { useNavigation , useFocusEffect} from '@react-navigation/native';
 import Feather from 'react-native-vector-icons/Ionicons';
 import { Button } from 'react-native-paper';
 import CalendarPicker from 'react-native-calendar-picker';
 import { Dropdown } from 'react-native-element-dropdown';
-
+import { format } from 'date-fns';
+import axios from 'axios';
+import { AuthContext } from './AuthContext';
 const data = [
   { label: 'Salary', value: '0' },
   { label: 'Allowance', value: '0' },
@@ -13,9 +15,10 @@ const data = [
   { label: 'Investment money', value: '0' },
 ];
 const Notification = ({ navigation }) => {
+  const {id, updateData, setUpdateData} = useContext(AuthContext);
   const [isChatSelected, setIsChatSelected] = useState(false);
   const [isNotificationSelected, setIsNotificationSelected] = useState(true);
-  const [day, setDay] = React.useState(new Date().toDateString());
+  const [day, setDay] = useState(format(new Date(), 'yyyy-MM-dd'));
   const [numberIncome, setNumberIncome] = React.useState('');
   const [note,  setNote] = React.useState('');
   const [income, setIncome] =useState([]);
@@ -31,7 +34,27 @@ const Notification = ({ navigation }) => {
     setIncome([...income, newIncome]);
     setNumberIncome('');
     setNote('');
-    navigation.navigate('Home', {income: [ newIncome, ...income]});
+
+    const objectIncome = {
+      "categoriesIncome": incomeCategory ,
+      "date": day ,
+      "value": numberIncome,
+      "userId": id,
+      "note": note
+     }
+     axios.post(`http://134.209.108.2:3002/api/addIncome`, objectIncome, {
+    headers: {
+      'Content-Type': 'application/json',
+    },}
+)
+    .then(response => {
+    console.log("true")
+    setUpdateData(!updateData);
+    navigation.navigate('Home')
+    })
+    .catch(error => {
+      console.log(error);
+    });
   }
 
   const nav = useNavigation();
@@ -48,11 +71,16 @@ const onDateChange = (date, type) => {
   if (type === 'DATE_NOW') {
     return;
   } else {
-    const selectedIncomeDate = date.toDate();
+    const selectedDate = date.toDate();
+    const day = selectedDate.getDate();
+    const month = selectedDate.getMonth() + 1; 
+    const year = selectedDate.getFullYear();
+    const formattedDate = `${year}-${month}-${day}`;
     setSelectedIncomeDate(selectedIncomeDate);
-    setDay(selectedIncomeDate.toDateString());
+    setDay(formattedDate);
   }
 };
+
 const handleDropdownFocus = () => {
 };
 
@@ -137,6 +165,7 @@ const renderItem = ({ item }) => (
                     onDateChange={onDateChange}
                   />
         </View>
+        <View style={styles.horizontalLine} />
         <View style = {styles.expense}>
             <Text style={styles.text}>Expense money</Text>
             <TextInput
@@ -163,17 +192,6 @@ const renderItem = ({ item }) => (
             />
         </View>
         <View style={styles.categoryContainer}>
-            {/* <FlatList
-                  data={predefinedIncomeCategories}
-                  renderItem={renderItem}
-                  keyExtractor={(item) => item}
-                  horizontal
-                  style={styles.flatList}
-                  initialScrollIndex={incomeCategoryIndex}
-                  getItemLayout={(data, index) => (
-                  { length: 100, offset: 100 * index, index }
-                  )}
-            /> */}
                 <Text style= {{fontSize : 18, marginRight: 8}}>Category</Text>
                 <Dropdown
                   style={styles.dropdown}
@@ -192,10 +210,10 @@ const renderItem = ({ item }) => (
     </View>
     ) : null}
       <Button 
-          labelStyle={{ color: '#ffffff' }}
+          labelStyle={{ color: '#ffffff', fontSize: 19, textAlign: 'center'}}
           style= {styles.buttonAdd}
           onPress={handleSubmitIncome} 
-          >Enter the income</Button>
+          >Enter your income</Button>
   </View>
 </ScrollView>
   );
@@ -224,7 +242,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   selectedButton: {
-    backgroundColor: '#007ACC',
+    backgroundColor: '#88AB8E',
   },
   buttonText: {
     textAlign: 'center',
@@ -233,6 +251,11 @@ const styles = StyleSheet.create({
   selectedText: {
     color: 'white',
   },
+  horizontalLine: {
+    height: 1,
+    backgroundColor: '#ccc',
+    marginVertical: 10,
+    },
   chatItem: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -293,7 +316,7 @@ const styles = StyleSheet.create({
     fontSize: 17
   },
   buttonAdd:{
-    backgroundColor: '#00A9FF',
+    backgroundColor: '#88AB8E',
     marginTop: 10,
     marginLeft: 20,
     marginRight: 20,

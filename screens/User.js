@@ -11,6 +11,9 @@ const Account = () => {
   const changMoneyPressHandler = () => {
       navigation.navigate('ChangeMoney')
   }
+  const premiumHandler = () => {
+    navigation.navigate('Premium')
+}
   const handleLogout = () => {
     setisAuthenticated(false);
     console.log('Logged Out!');
@@ -24,18 +27,25 @@ const Account = () => {
           style={styles.avatar}
         />
         <View style={styles.ratingContainer}>
-          <Text style={styles.username}>Baby girl</Text>
-          <Text style={styles.phone}>0971170xxx</Text>
+          <Text style={styles.phone}>tuyen@gmail.com</Text>
         </View>
       </View>
       <View style={styles.separator} />
-      <View style={styles.notificationContainer}>
+      {/* <View style={styles.notificationContainer}>
         <Text style={styles.notificationText}>Notifications</Text>
         <Switch
           value={isNotificationEnabled}
           onValueChange={() => setNotificationEnabled(!isNotificationEnabled)}
         />
-      </View>
+      </View> */}
+      <TouchableOpacity
+        style={styles.menuItem}
+        onPress={() => premiumHandler()}
+      >
+        <Image source={require('../assets/crown.png')} style= {styles.images}/>
+        <Text style={[styles.menuText, { fontWeight: 'bold' }]}>Premium</Text>
+      </TouchableOpacity>
+
       <View style={styles.menuItem}>
         <IonIcon name="wallet-outline" size={25} color="#4390f7" />
         <Text style={styles.menuText}> My vallet</Text>
@@ -59,7 +69,6 @@ const Account = () => {
         <Text style={styles.menuText}> Setting</Text>
       </View>
 
-
       <TouchableOpacity
           style={[styles.menuItem, styles.logoutButton]}
           onPress={handleLogout}
@@ -77,11 +86,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
   },
+  images:{
+    width: 32,
+    height: 32,
+  },
   profileContainer: {
     alignItems: 'center',
     padding: 20,
-    backgroundColor: '#89CFF3',
-    paddingTop: 70, 
+    backgroundColor: '#88AB8E',
   },
   avatar: {
     width: 100,
@@ -91,7 +103,7 @@ const styles = StyleSheet.create({
   username: {
     fontSize: 20,
     fontWeight: 'bold',
-    marginTop: 10,
+    marginTop: 5,
   },
   ratingContainer: {
     flexDirection: 'column',
@@ -128,9 +140,10 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     textAlign: 'center',
     alignSelf: 'center',
+    // color: '#FFC436'
   },
   logoutButton: {
-    backgroundColor: '#FF5733',
+    backgroundColor: '#88AB8E',
     borderRadius: 8,
     marginTop: 10,
     alignSelf: 'center',

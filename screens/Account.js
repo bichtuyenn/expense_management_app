@@ -1,6 +1,7 @@
 import User from './User'
 import { createStackNavigator } from '@react-navigation/stack'
 import ChangeMoney from './ChangeMoney';
+import Premium from './Premium';
 
 const Stack = createStackNavigator()
 const AccountStack = () => {
@@ -13,6 +14,10 @@ const AccountStack = () => {
       <Stack.Screen
         name="ChangeMoney"
         component={ChangeMoney}
+      />
+      <Stack.Screen
+        name="Premium"
+        component={Premium}
       />
     </Stack.Navigator>
   );

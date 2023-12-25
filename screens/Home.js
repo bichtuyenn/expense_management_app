@@ -1,33 +1,71 @@
 import {View, Text , StyleSheet, SafeAreaView, FlatList, ScrollView} from 'react-native'
 import CalendarPicker from 'react-native-calendar-picker';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { PieChart } from 'react-native-chart-kit';
 import Chart from './Chart';
 import ChartIncome from './ChartIncome';
-
-
+import { AuthContext } from './AuthContext';
+import axios from 'axios';
 
 const Home = ({ route }) => {
+    const {updateData, setUpdateData, id} = useContext(AuthContext);
     const [selectedtDate, setSelectedDate] = useState(new Date());
     const [expenses, setExpenses] = useState([]);
     const [income, setIncome] =useState([]);
+    useEffect(() => {
+      // console.log(id);
+      axios.get(`http://134.209.108.2:3002/api/getExpenses/${id}`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },}
+    )
+        .then(response => {
+        console.log("true")
+        setExpenses(response.data);
+        })
+        .catch(error => {
+          console.log(error);
+          // hien thi o da
+        });
+    }, [updateData])
+
+    useEffect(() => {
+      console.log(id);
+      axios.get(`http://134.209.108.2:3002/api/getIncomes/${id}`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+        .then(response => {
+          console.log("true")
+          // console.log("income data :", response.data)
+          setIncome(response.data); // Fix here
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }, [updateData])
+    
+    useEffect(() => {
+      if (route.params && route.params.expenses) {
+        setExpenses(route.params.expenses);
+      }
+    }, [route.params]);
 
     useEffect(() => {
       setSelectedDate(new Date());
     }, []);
-  
 // income
 const calculateTotalIncomeByCategory = (category) => {
   let totalIncome = 0;
   income.forEach((income) => {
-    if (income.incomeCategory === category) {
-      const number = parseFloat(income.numberIncome || 0);
+    if (income.categoriesIncome === category) {
+      const number = parseFloat(income.value || 0);
       totalIncome += number;
     }
   });
   return totalIncome;
 };
-
 const totalSalary = calculateTotalIncomeByCategory('Salary');
 const totalBonus = calculateTotalIncomeByCategory('Bonus');
 const totalAllowance = calculateTotalIncomeByCategory('Allowance');
@@ -36,12 +74,11 @@ const totalInvestment = calculateTotalIncomeByCategory('Investment money');
  const calculateTotalIncome = () => {
       let totalIncome = 0;
       income.forEach((income) => {
-        const numberIncome = parseFloat(income.numberIncome || 0);
+        const numberIncome = parseFloat(income.value || 0);
         totalIncome += numberIncome;
       });
       return totalIncome;
  };
-
   useEffect(() => {
       if (route.params && route.params.income) {
         setIncome(route.params.income);
@@ -52,8 +89,8 @@ const totalInvestment = calculateTotalIncomeByCategory('Investment money');
     const calculateTotalExpenseByCategory = (category) => {
       let totalExpense = 0;
       expenses.forEach((expense) => {
-        if (expense.category === category) {
-          const number = parseFloat(expense.number || 0);
+        if (expense.categoriesExpenses === category) {
+          const number = parseFloat(expense.value || 0);
           totalExpense += number;
         }
       });
@@ -69,18 +106,11 @@ const totalInvestment = calculateTotalIncomeByCategory('Investment money');
     const calculateTotalExpense = () => {
       let totalExpense = 0;
       expenses.forEach((expense) => {
-        const number = parseFloat(expense.number || 0);
+        const number = parseFloat(expense.value || 0);
         totalExpense += number;
       });
       return totalExpense;
     };
-
-    useEffect(() => {
-      if (route.params && route.params.expenses) {
-        setExpenses(route.params.expenses);
-      }
-    }, [route.params]);
-
     return (
 <ScrollView>
 <SafeAreaView style={styles.container}>
@@ -114,12 +144,12 @@ const totalInvestment = calculateTotalIncomeByCategory('Investment money');
           {expenses.map((expense, index) => (
             <View key={index} style={styles.expenseRow}>
               <Text style={styles.expenseCategory}>
-                {expense.category}
+                {expense.categoriesExpenses}
               </Text>
               <View style={styles.expenseDetails}>
-                <Text>{expense.day}</Text>
-                <Text>{parseFloat(expense.number || 0)}</Text>
-                <Text>{expense.text}</Text>
+                <Text>{expense.date}</Text>
+                <Text>{parseFloat(expense.value || 0)}</Text>
+                <Text>{expense.note}</Text>
               </View>
               {index < expenses.length - 1 && (
                 <View style={styles.divider} />
@@ -138,10 +168,11 @@ const totalInvestment = calculateTotalIncomeByCategory('Investment money');
         <>
           {income.map((income, index) => (
             <View key={index} style={styles.expenseRow}>
-              <Text style={styles.expenseCategory}>{income.note}</Text>
+              <Text style={styles.expenseCategory}>{income.categoriesIncome}</Text>
               <View style={styles.expenseDetails}>
-                <Text>{income.day}</Text>
-                <Text>{parseFloat(income.numberIncome || 0)}</Text>
+                <Text>{income.date}</Text>
+                <Text>{parseFloat(income.value || 0)}</Text>
+                <Text>{income.note}</Text>
               </View>
               {index < income.length - 1 && (
                 <View style={styles.divider} />
@@ -155,8 +186,7 @@ const totalInvestment = calculateTotalIncomeByCategory('Investment money');
     </View>
 
     <View style={styles.chartContainer}>
-        <Chart expenses={expenses} />
-        <ChartIncome income={income} />
+        {/* <ChartIncome income={income} />  */}
     </View>
   </View>
 </SafeAreaView>

@@ -8,20 +8,47 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { LinearGradient } from "expo-linear-gradient";
 import { useTheme } from 'react-native-paper';
 import Feather from 'react-native-vector-icons/Feather';
-
+import axios from "axios";
+import { set } from 'date-fns';
 const Login = () => {
   const { colors } = useTheme();
 
   const navigation = useNavigation();
   
-  const {email , setEmail,password,setPassword,isAuthenticated,setisAuthenticated} = useContext(AuthContext);
+  const {id ,email , setEmail,password,setId, setPassword,isAuthenticated,setisAuthenticated, updateData, setUpdateData}= useContext(AuthContext);
 
   const handleLogin = (email, password) => {
-    if (email === '20522134@gm.uit.edu.vn' && password === 'huynhthibichtuyen') {
+
+    // if (email === '20522134@gm.uit.edu.vn' && password === 'huynhthibichtuyen') {
+    //     setisAuthenticated(true);
+    // } else {
+    //     Alert.alert('Warning', 'incorrect email or password.');
+    // };
+    // nhập thonog tin đăng nhập -> gửi lên server -> database -> gửi về cho front end 
+    // 1 sai mk, mail
+    const request = {
+      "email": email,
+      "password": password
+    }
+        axios.post(`http://134.209.108.2:3002/api/login`,request, {
+        headers: {
+          'Content-Type': 'application/json',
+        },}
+    )
+        .then(response => {
+        // Alert.alert('Warning', 'correct email and password.');
+        console.log('Dữ liệu nhận được sau khi gửi POST request:', response.data);
+        let data = response.data.user;
+        setEmail(data.email);
+        setPassword(data.password);
+        setId(data._id);
         setisAuthenticated(true);
-    } else {
-        Alert.alert('Warning', 'incorrect email or password.');
-    };
+        setUpdateData(!updateData);
+        })
+        .catch(error => {
+          // hien thi o day
+          Alert.alert('Warning', 'incorrect email or password.');
+        });
   };
   const handleOnPressSignup = () => {
     navigation.navigate('Signup');
@@ -29,7 +56,7 @@ const Login = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar backgroundColor='#00A9FF' barStyle="light-content"/>
+      <StatusBar backgroundColor='#79AC78' barStyle="light-content"/>
       <View style={styles.header}>
           <Text style={styles.text_header}>Welcome!</Text>
       </View>
@@ -50,6 +77,7 @@ const Login = () => {
                     color={colors.text}
                     size={20}
                 />
+                
             <TextInput
                     placeholder="Your email"
                     placeholderTextColor="#666666"
@@ -109,7 +137,7 @@ const Login = () => {
                     onPress={() => handleLogin(email, password)}
                 >
                   <LinearGradient
-                      colors={['#A0E9FF', '#00A9FF']}
+                      colors={['#AFC8AD', '#88AB8E']}
                       style={styles.signIn}
                   >
                       <Text style={[styles.textSign, {
@@ -146,75 +174,13 @@ const Login = () => {
 };
 
 const styles = StyleSheet.create({
-// container: {
-//   flex: 1,
-//   justifyContent: 'center',
-//   alignItems: 'center',
-//   backgroundColor: '#00A9FF'
-// },
 
-// header: {
-//   flex: 1,
-//   justifyContent: 'flex-end',
-//   paddingHorizontal: 20,
-//   paddingBottom: 50
-//       },
-// footer: {
-//   flex: 3,
-//   backgroundColor: '#fff',
-//   borderTopLeftRadius: 30,
-//   borderTopRightRadius: 30,
-//   paddingHorizontal: 20,
-//   paddingVertical: 30
-//       },
-// text_header: {
-//    color: '#fff',
-//           fontWeight: 'bold',
-//           fontSize: 30
-//       },
-// imageStyle: {
-//   width: 80,
-//   height: 80,
-//   borderRadius: 100,
-//   alignSelf: 'center',
-//   marginTop: 80,
-// },
 text: {
   alignSelf: 'center',
   marginTop: 20,
   fontSize: 20,
   fontWeight: 'bold',
 },
-// textInput: {
-//   height: 50,
-//   width: 300,
-//   borderColor: 'gray',
-//   borderWidth: 1,
-//   paddingHorizontal: 10,
-//   alignSelf: 'center',
-//   borderRadius: 8,
-//   marginTop: 25,
-// },
-// Forgot: {
-//   fontSize: 12,
-//   marginTop: 5,
-//   marginRight: 20,
-//   color: '#FF1493',
-// },
-// button: {
-//   backgroundColor: '#1640D6',
-//   padding: 10,
-//   borderRadius: 10,
-//   marginTop: 15,
-//   width: 300,
-//   alignSelf: 'center',
-//   height: 45,
-// },
-// textLogin: {
-//   fontSize: 15,
-//   color: 'white',
-//   alignSelf: 'center',
-// },
 imageContainer: {
   flexDirection: 'row',
   justifyContent: 'center',
@@ -235,97 +201,10 @@ signUpContainer: {
 signUpText: {
   color: 'blue',
 },
-// forgotContainer: {
-//   alignItems: 'flex-end',
-//   marginRight: 25,
-// },
-// logoContainer: {
-//   flexDirection: 'row',
-//   justifyContent: 'center',
-//   alignItems: 'center',
-// },
 
-// inputContainer: {
-//   flexDirection: 'row',
-//   alignItems: 'center',
-//   borderBottomWidth: 1,
-//   borderBottomColor: 'black',
-// },
-// iconContainer: {
-//   padding: 10,
-// },
-// iconStyle: {
-//   width: 20,
-//   height: 20,
-// },
-// textI: {
-//   justifyContent: 'center',
-//   flex: 1,
-//   marginLeft:10,
-// },
-// containerTextInput: {
-//   height: 50,
-//   width: 300,
-//   borderColor: 'gray',
-//   borderWidth: 1,
-//   paddingHorizontal: 10,
-//   alignSelf: 'center',
-//   borderRadius: 8,
-//   marginTop: 25,
-//   flexDirection: 'row',
-// },
-// imageTextInput: {
-//   width: 27,
-//   height: 27,
-//   marginTop:11,
-//   marginLeft:12,
-// },
-// text_footer: {
-//   color: '#05375a',
-//   fontSize: 18
-// },
-// action: {
-//   flexDirection: 'row',
-//   marginTop: 10,
-//   borderBottomWidth: 1,
-//   borderBottomColor: '#f2f2f2',
-//   paddingBottom: 5
-// },
-// actionError: {
-//   flexDirection: 'row',
-//   marginTop: 10,
-//   borderBottomWidth: 1,
-//   borderBottomColor: '#FF0000',
-//   paddingBottom: 5
-// },
-// textInput: {
-//   flex: 1,
-//   marginTop: Platform.OS === 'ios' ? 0 : -12,
-//   paddingLeft: 10,
-//   color: '#05375a',
-// },
-// errorMsg: {
-//   color: '#FF0000',
-//   fontSize: 14,
-// },
-// button: {
-//   alignItems: 'center',
-//   marginTop: 50
-// },
-// signIn: {
-//   width: '100%',
-//   height: 50,
-//   justifyContent: 'center',
-//   alignItems: 'center',
-//   borderRadius: 10
-// },
-// textSign: {
-//   fontSize: 18,
-//   fontWeight: 'bold'
-// }
 container: {
   flex: 1, 
-  backgroundColor: '#00A9FF'
+  backgroundColor: '#88AB8E'
 },
 header: {
     flex: 1,

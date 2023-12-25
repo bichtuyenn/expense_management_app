@@ -10,27 +10,51 @@ import {
     Platform,
     StyleSheet,
     ScrollView,
-    StatusBar
+    StatusBar,
+    Alert
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import {AuthContext} from './AuthContext'
 import * as Animatable from 'react-native-animatable';
 import { LinearGradient } from "expo-linear-gradient";
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import axios from "axios";
 import Feather from 'react-native-vector-icons/Feather';
 const Signup = () => {
   const navigation = useNavigation();
-  const {email , setEmail,password,setPassword,isAuthenticated,setisAuthenticated} = useContext(AuthContext);
-  const [username, setUsername] = React.useState('');
+  const {id ,email , setEmail,password,setId, setPassword,isAuthenticated,setisAuthenticated, updateData, setUpdateData} = useContext(AuthContext);
+  // const [username, setUsername] = React.useState('');
   const [confirm, setConfirm] = React.useState('');
   const handleSignup = () => {
-    if (username === '' || email === '' || password === '' || confirm === '') {
+    if ( email === '' || password === '' || confirm === '') {
       Alert.alert('Warning', 'Please fill in all fields.');
     } else if (password !== confirm) {
       Alert.alert('Warning', 'Password and confirm password do not match.');
-    } else if (password == confirm && username !== '' && email !== '' && password !== '' && confirm !== '' ){
-      Alert.alert('Created an account!')
+    } else if (password == confirm  && email !== '' && password !== '' && confirm !== '' ){
+     
+      const request = {
+        email: email,
+        password: password,
+        confirmpassword: confirm
+      }
+      // 
+      axios.post(`http://134.209.108.2:3002/api/register`,request, {
+        headers: {
+          'Content-Type': 'application/json',
+        },}
+    )
+        .then(response => {
+          Alert.alert('Created an account!')
+          console.log('Dữ liệu nhận được sau khi gửi POST request:', response.data);
+
+        })
+        .catch(error => {
+          // hien thi o day
+          Alert.alert('Warning', 'incorrect.');
+        });
+        // 
+
     }
+
   };
   const handleOnPressLogin =() =>{
     navigation.goBack();
@@ -38,7 +62,7 @@ const Signup = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar backgroundColor='#00A9FF' barStyle="light-content"/>
+      <StatusBar backgroundColor='#79AC78' barStyle="light-content"/>
       <View style={styles.header}>
             <Text style={styles.text_header}>Sign up now !</Text>
       </View>
@@ -48,7 +72,7 @@ const Signup = () => {
         >
           <ScrollView>
           <View style={styles.actions}>
-            <Text style={styles.text_footer}>Username</Text>
+            <Text style={styles.text_footer}>Your email</Text>
             <View style={styles.action}>
                 <Feather 
                     name="mail"
@@ -139,7 +163,7 @@ const Signup = () => {
                     onPress={handleSignup}
                 >
                 <LinearGradient
-                    colors={['#A0E9FF', '#00A9FF']}
+                    colors={['#AFC8AD', '#88AB8E']}
                     style={styles.signIn}
                 >
                     <Text style={[styles.textSign, {
@@ -164,7 +188,7 @@ export default Signup;
 const styles = StyleSheet.create({
   container: {
     flex: 1, 
-    backgroundColor: '#00A9FF'
+    backgroundColor: '#88AB8E'
   },
   header: {
       flex: 1,

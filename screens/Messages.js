@@ -1,10 +1,13 @@
-import React,{useState,  useEffect} from 'react';
+import React,{useState,  useEffect, useContext} from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, FlatList, ScrollView , Alert} from 'react-native';
 import { useNavigation , useFocusEffect} from '@react-navigation/native';
 import { Button } from 'react-native-paper';
 import CalendarPicker from 'react-native-calendar-picker';
 import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { format } from 'date-fns';
+import { AuthContext } from './AuthContext';
+import axios from 'axios';
 
 const data = [
   { label: 'Food', value: '0' },
@@ -14,16 +17,15 @@ const data = [
   { label: 'Transport', value: '0'}
 ];
   const Messages = ({ navigation }) => {
+    const {id, updateData, setUpdateData,updateDataExpenses, setUpdateDataExpenses} = useContext(AuthContext);
       const [isChatSelected, setIsChatSelected] = useState(true);
       const [isNotificationSelected, setIsNotificationSelected] = useState(false);
-      const [day, setDay] = React.useState(new Date().toDateString());
       const [number, setNumber] = React.useState('');
-      const [text,  setText] = React.useState('');
+      const [text, setText] = React.useState('');
       const [expenses, setExpenses] =useState([]);
       const [selectedCategory, setSelectedCategory] = useState(data[0].label);
-      // const [categoryIndex, setCategoryIndex] = useState(0);
-      // const predefinedCategories = ['Food', 'Rent', 'Shopping', 'Entertainment', 'Transport'];
       const [selectedDate, setSelectedDate] = useState(new Date());
+      const [day, setDay] = useState(format(new Date(), 'yyyy-MM-dd'));
 
 
       const initialCategoryValues = {
@@ -42,11 +44,15 @@ const data = [
           return;
         } else {
           const selectedDate = date.toDate();
+          const day = selectedDate.getDate();
+          const month = selectedDate.getMonth() + 1; 
+          const year = selectedDate.getFullYear();
+          const formattedDate = `${year}-${month}-${day}`;
           setSelectedDate(selectedDate);
-          setDay(selectedDate.toDateString());
+          setDay(formattedDate);
         }
       };
-      
+    
       const handleCategoryPress = (category) => {
         setSelectedCategory(category);
       };
@@ -66,11 +72,40 @@ const data = [
         }
         const newExpense = { number, text, day, category: selectedCategory }; 
         setExpenses([...expenses, newExpense]); 
-        setNumber('0');
+        setNumber('');
         setText('');
-        navigation.navigate('Home', { expenses: [ newExpense,...expenses] });
+        // navigation.navigate('Home', { expenses: [ newExpense,...expenses] });
+        // console.log(id);
+        // console.log(day);
+        // console.log(number);
+        // console.log(text);
+        // console.log(selectedCategory)
+         const objectExpenses = {
+          "categoriesExpenses": selectedCategory ,
+          "date": day,
+          "value": number,
+          "userId": id,
+          "note": text
+         }
+         axios.post(`http://134.209.108.2:3002/api/addExpenses`, objectExpenses, {
+        headers: {
+          'Content-Type': 'application/json',
+        },}
+    )
+        .then(response => {
+        console.log("true")
+        setUpdateData(!updateData);
+        // setUpdateDataExpenses(!updateDataExpenses);
+        navigation.navigate('Home')
+        })
+        .catch(error => {
+          console.log(error);
+          // hien thi o da
+        });
+        // tao 1 cai object de gui len server
+
       }
-    
+
       const nav = useNavigation();
       useFocusEffect(() => {
         setIsChatSelected(true);
@@ -148,6 +183,7 @@ const data = [
                     onDateChange={onDateChange}
                   />
           </View>
+          <View style={styles.horizontalLine} />
             <View style = {styles.expense}>
                 <Text style={styles.text}>Expense money</Text>
                 <TextInput
@@ -162,6 +198,7 @@ const data = [
                 <Text style={styles.text}>Date</Text>
                 <View>
                     <Text style={[styles.dateTimeNow, styles.input]}>{day}</Text>
+            
                 </View>
             </View>
             <View style={styles.expense}>
@@ -228,7 +265,7 @@ const data = [
       marginTop: 20,
     },
     selectedButton: {
-      backgroundColor: '#007ACC',
+      backgroundColor: '#88AB8E',
     },
     buttonText: {
       textAlign: 'center',
@@ -306,7 +343,7 @@ const data = [
       fontSize: 17,    
     },
     buttonAdd:{
-      backgroundColor: '#00A9FF',
+      backgroundColor: '#88AB8E',
       marginTop: 10,
       marginLeft: 20,
       marginRight: 20,
@@ -325,7 +362,7 @@ const data = [
       borderColor: '#ccc',
     },
     selectedCategoryItem: {
-      backgroundColor: '#007ACC',
+      backgroundColor: '#79AC78',
     },
   
     categoryText: {
@@ -358,7 +395,11 @@ const data = [
       alignItems: 'center',
       marginVertical: 10,
     },
-  
+    horizontalLine: {
+      height: 1,
+      backgroundColor: '#ccc',
+      marginVertical: 10,
+      },
     categoryContainer: {
       flexDirection: 'row',
       alignItems: 'center',
