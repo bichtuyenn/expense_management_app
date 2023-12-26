@@ -1,26 +1,40 @@
 import React, { useEffect } from 'react';
 import { WebView } from 'react-native-webview';
 
-const VnPayWebView = ({ navigation }) => {
-  const paymentUrl = 'YOUR_VNPAY_PAYMENT_URL'; // Thay thế bằng URL thanh toán VNPAY của bạn
+// Hàm trả về một số nguyên ngẫu nhiên trong khoảng từ min đến max (bao gồm cả min và max)
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
-  // Hàm xử lý sự kiện điều hướng trong WebView
+// Hàm tạo số nguyên ngẫu nhiên có độ dài n ký tự
+function generateRandomNumberWithLength(length) {
+  let randomNumber = '';
+  for (let i = 0; i < length; i++) {
+    const digit = getRandomInt(0, 9);
+    randomNumber += digit;
+  }
+  return randomNumber;
+}
+
+const VnPayWebView = ({ navigation }) => {
+  const randomOrderId = generateRandomNumberWithLength(10);
+  const paymentUrl = `http://134.209.108.2:8888/order/create_payment_url?amount=10000&orderId=${randomOrderId}`;
+
   const handleNavigation = (event) => {
     const { url } = event;
-
-    // Kiểm tra xem URL có chứa chỉ báo thành công hoặc lỗi không
-    if (url.includes('payment-success')) {
-      // Xử lý thành công, ví dụ: điều hướng đến màn hình thành công
-      navigation.navigate('PaymentSuccess');
-    } else if (url.includes('payment-error')) {
-      // Xử lý lỗi, ví dụ: điều hướng đến màn hình lỗi
-      navigation.navigate('PaymentError');
+    if (url.includes('success=ok')) {
+      // navigation.navigate('PaymentSuccess');
+      console.log('success')
+    } else if (url.includes('success=error')) {
+      console.log('error')
     }
   };
 
   useEffect(() => {
     return () => {
-      // Dọn dẹp thêm nếu cần
+      // Hàm cleanup nếu cần
     };
   }, []);
 

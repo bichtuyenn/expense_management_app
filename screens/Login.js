@@ -56,10 +56,15 @@ const Login = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar backgroundColor='#79AC78' barStyle="light-content"/>
-      <View style={styles.header}>
+      <StatusBar backgroundColor='#FDCEDF' barStyle="light-content"/>
+      {/* <View style={styles.header}> */}
+       <LinearGradient
+                    colors={['#FDCEDF', '#BEADFA']}
+                    style={styles.header}
+        >
           <Text style={styles.text_header}>Welcome!</Text>
-      </View>
+        </LinearGradient>
+      {/* </View> */}
       
       <Animatable.View 
             animation="fadeInUpBig"
@@ -137,7 +142,7 @@ const Login = () => {
                     onPress={() => handleLogin(email, password)}
                 >
                   <LinearGradient
-                      colors={['#AFC8AD', '#88AB8E']}
+                      colors={['#F875AA', '#BEADFA']}
                       style={styles.signIn}
                   >
                       <Text style={[styles.textSign, {
@@ -170,10 +175,11 @@ const Login = () => {
 
       </Animatable.View>
   </View>
+
 );
 };
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create({ 
 
 text: {
   alignSelf: 'center',
@@ -199,12 +205,13 @@ signUpContainer: {
   alignSelf: 'center',
 },
 signUpText: {
-  color: 'blue',
+  color: '#ED5AB3',
+  fontWeight:'bold',
 },
 
 container: {
   flex: 1, 
-  backgroundColor: '#88AB8E'
+  backgroundColor: '#BEADFA'
 },
 header: {
     flex: 1,

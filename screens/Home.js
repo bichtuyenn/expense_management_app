@@ -6,7 +6,7 @@ import Chart from './Chart';
 import ChartIncome from './ChartIncome';
 import { AuthContext } from './AuthContext';
 import axios from 'axios';
-
+import { LinearGradient } from "expo-linear-gradient";
 const Home = ({ route }) => {
     const {updateData, setUpdateData, id} = useContext(AuthContext);
     const [selectedtDate, setSelectedDate] = useState(new Date());
@@ -114,29 +114,34 @@ const totalInvestment = calculateTotalIncomeByCategory('Investment money');
     return (
 <ScrollView>
 <SafeAreaView style={styles.container}>
-  <View style={styles.container}>
-    <Text style={styles.titleStyle}>EXPENSE MANAGEMENT</Text>
-    <View style={styles.horizontalLine} />
+    <LinearGradient
+                    colors={['#FDCEDF', '#BEADFA']}
+                    style={styles.header}
+    >
+    <Text style={[styles.titleStyle, {marginBottom: 30}]}>EXPENSE MANAGEMENT</Text>
+    <View style = {styles.textheader}>
+        <View style={styles.rowContainer}>
+            <Text style={styles.label}>Thu nhập:</Text>
+            <Text style={styles.value}>{calculateTotalIncome()} đ</Text>
+        </View>
 
-    <View style={styles.rowContainer}>
-      <Text style={styles.label}>Thu nhập:</Text>
-      <Text style={styles.value}>{calculateTotalIncome()} đ</Text>
+        <View style={styles.rowContainer}>
+            <Text style={styles.label}>Chi tiêu:</Text>
+            <Text style={styles.value}>{calculateTotalExpense()} đ</Text>
+        </View>
+
+        <View style={styles.rowContainer}>
+            <Text style={styles.label}>Số dư:</Text>
+            <Text style={styles.value}>
+              {calculateTotalIncome() - calculateTotalExpense()} đ
+            </Text>
+        </View>
     </View>
-
-    <View style={styles.rowContainer}>
-      <Text style={styles.label}>Chi tiêu:</Text>
-      <Text style={styles.value}>{calculateTotalExpense()} đ</Text>
-    </View>
-
-    <View style={styles.rowContainer}>
-      <Text style={styles.label}>Số dư:</Text>
-      <Text style={styles.value}>
-        {calculateTotalIncome() - calculateTotalExpense()} đ
-      </Text>
-    </View>
-
-    <View style={styles.horizontalLine} />
-
+</LinearGradient>
+<LinearGradient
+        colors={['#BEADFA', '#FDCEDF']}
+        style={styles.body}
+>
     <View style={styles.expenseDetail}>
       <Text style={styles.expenseHeader}>Chi tiêu</Text>
       {expenses.length > 0 ? (
@@ -148,7 +153,7 @@ const totalInvestment = calculateTotalIncomeByCategory('Investment money');
               </Text>
               <View style={styles.expenseDetails}>
                 <Text>{expense.date}</Text>
-                <Text>{parseFloat(expense.value || 0)}</Text>
+                <Text>- {parseFloat(expense.value || 0)} đ</Text>
                 <Text>{expense.note}</Text>
               </View>
               {index < expenses.length - 1 && (
@@ -171,7 +176,7 @@ const totalInvestment = calculateTotalIncomeByCategory('Investment money');
               <Text style={styles.expenseCategory}>{income.categoriesIncome}</Text>
               <View style={styles.expenseDetails}>
                 <Text>{income.date}</Text>
-                <Text>{parseFloat(income.value || 0)}</Text>
+                <Text>+ {parseFloat(income.value || 0)} đ</Text>
                 <Text>{income.note}</Text>
               </View>
               {index < income.length - 1 && (
@@ -184,11 +189,7 @@ const totalInvestment = calculateTotalIncomeByCategory('Investment money');
         <Text>No income</Text>
       )}
     </View>
-
-    <View style={styles.chartContainer}>
-        {/* <ChartIncome income={income} />  */}
-    </View>
-  </View>
+  </LinearGradient>
 </SafeAreaView>
 </ScrollView>
 );
@@ -196,46 +197,68 @@ const totalInvestment = calculateTotalIncomeByCategory('Investment money');
 
 const styles = StyleSheet.create({
 container: {
-flex: 1,
-backgroundColor: '#ffffff',
-padding: 16,
+  flex: 1,
+  backgroundColor: '#ffffff',
+  padding: 15,
+  },
+header:{
+  backgroundColor: '#BEADFA',
+  borderTopLeftRadius: 50,
+  borderTopRightRadius: 50,
+  paddingHorizontal: 20,
+  paddingVertical: 30,
+  // borderBottomLeftRadius: 20,
+  // borderBottomRightRadius: 20,
+},
+textheader:{
+  backgroundColor: '#ffffff',
+  borderRadius: 15,
+  paddingHorizontal: 20,
+  paddingVertical: 20
 },
 titleStyle: {
-textAlign: 'center',
-fontSize: 20,
-marginBottom: 20,
+  textAlign: 'center',
+  fontSize: 20,
+  marginBottom: 20,
 },
 horizontalLine: {
-height: 1,
-backgroundColor: '#ccc',
-marginVertical: 10,
+  height: 1,
+  backgroundColor: '#ccc',
+  marginVertical: 10,
+},
+body:{
+  marginTop: 10,
+  borderBottomLeftRadius: 10,
+  borderBottomRightRadius: 10,
+  // borderRadius: 20,
 },
 rowContainer: {
-flexDirection: 'row',
-justifyContent: 'space-between',
-marginTop: 10,
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  marginTop: 10,
 },
 label: {
 fontWeight: 'bold',
 },
 value: {
-color: 'green',
+  color: 'green',
 },
 expenseDetail: {
-marginTop: 10,
-backgroundColor: '#B2C8BA',
-padding: 10,
+  margin: 12,
+  backgroundColor: '#ffffff',
+  padding: 20,
+  // borderRadius: 20,
 },
 expenseHeader: {
-fontWeight: 'bold',
-fontSize: 16,
-marginBottom: 5,
+  fontWeight: 'bold',
+  fontSize: 16,
+  marginBottom: 5,
 },
 expenseRow: {
-flexDirection: 'row',
-justifyContent: 'space-between',
-alignItems: 'center',
-marginBottom: 5,
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  marginBottom: 5,
 },
 expenseCategory: {
 flex: 1,
@@ -247,9 +270,9 @@ flexDirection: 'column',
 marginLeft: 5,
 },
 divider: {
-height: 1,
-backgroundColor: '#ccc',
-marginVertical: 5,
+  height: 1,
+  backgroundColor: '#ccc',
+  marginVertical: 5,
 },
 chartContainer: {
 marginTop: 10,

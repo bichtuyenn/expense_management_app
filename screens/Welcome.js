@@ -121,9 +121,9 @@ import { useTheme } from '@react-navigation/native';
 const { width: screenWidth } = Dimensions.get('window');
 
 const splashImages = [
-  require('../assets/welcome1.png'),
   require('../assets/3.png'),
-  require('../assets/199.png'),
+  require('../assets/2.png'),
+  require('../assets/1.png'),
 ];
 
 const Welcome = ({navigation}) => {
@@ -175,8 +175,16 @@ const Welcome = ({navigation}) => {
           />
         ))}
       </View>
-      <TouchableOpacity onPress={()=>navigation.navigate('Login')}>
-        <Text style = {styles.skipButton}>Skip</Text>
+
+      <TouchableOpacity 
+          onPress={()=>navigation.navigate('Login')}
+      >
+          <LinearGradient
+                colors={['#F875AA', '#BEADFA']}
+                style={styles.button}
+          >
+                <Text style = {styles.skipButton}>Skip</Text>
+          </LinearGradient>
       </TouchableOpacity>
     </View>
   );
@@ -186,6 +194,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
+    position: 'relative',
   },
   image: {
     width: screenWidth,
@@ -209,6 +218,19 @@ const styles = StyleSheet.create({
     // position: 'absolute',
     // top: 730,
     // right: 40,
+  },
+  button:{
+    justifyContent:'center',
+    alignItems:'center',
+    marginBottom: 0,
+    width: '30%',
+    height: 50,
+    color: '#ECF2FF',
+    zIndex: 1,
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    borderRadius: 50,
   },
 });
 
