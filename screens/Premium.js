@@ -1,4 +1,3 @@
-
 import React, { useState,  useContext  } from 'react';
 import { View, Text, StyleSheet, Image, Switch, TouchableOpacity, ScrollView, Button } from 'react-native';
 import IonIcon from "react-native-vector-icons/Ionicons";
@@ -6,8 +5,14 @@ import { LinearGradient } from "expo-linear-gradient";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Feather from '@expo/vector-icons/Feather';
-const Premium = () => {
- 
+import { useNavigation } from '@react-navigation/native';
+
+const Premium = ({navigation}) => {
+   const onPressChangeViewHandle = () => {
+    console.log('Pressed');
+    navigation.navigate('VnPayWebView');
+   }
+
 return (
 
 <ScrollView>
@@ -31,20 +36,22 @@ return (
             </View>
         </View>
         <View style = {styles.body}>
-                    <LinearGradient
-                    colors={['#E26EE5', '#7E30E1']}  style={styles.priceBox} >
-                        <View>
-                             <IonIcon name="medal-outline" size={30} color="#fff" />
-                        </View>
-                        <View >
-                            <Text style = {styles.text1}>12 Months</Text>
-                            <Text style = {styles.text2}>BEST VALUE</Text>
-                        </View>
-                        <View>
-                            <Text style = {styles.text1}>25.000 đ</Text>
-                            <Text style = {styles.text2}>per month</Text>
-                        </View>
-                    </LinearGradient>
+                  <TouchableOpacity onPress = {onPressChangeViewHandle}> 
+                      <LinearGradient
+                      colors={['#E26EE5', '#7E30E1']}  style={styles.priceBox} >
+                          <View>
+                              <IonIcon name="medal-outline" size={30} color="#fff" />
+                          </View>
+                          <View >
+                              <Text style = {styles.text1}>12 Months</Text>
+                              <Text style = {styles.text2}>BEST VALUE</Text>
+                          </View>
+                          <View>
+                              <Text style = {styles.text1}>25.000 đ</Text>
+                              <Text style = {styles.text2}>per month</Text>
+                          </View>
+                      </LinearGradient>
+                  </TouchableOpacity>
  
                 <LinearGradient
                     colors={['#FECDA6', '#F55050']}  style={styles.priceBox} >

@@ -2,7 +2,7 @@ import User from './User'
 import { createStackNavigator } from '@react-navigation/stack'
 import ChangeMoney from './ChangeMoney';
 import Premium from './Premium';
-
+import VnPayWebView from './VnPayWebView';
 const Stack = createStackNavigator()
 const AccountStack = () => {
   return (
@@ -18,6 +18,10 @@ const AccountStack = () => {
       <Stack.Screen
         name="Premium"
         component={Premium}
+      />
+      <Stack.Screen
+        name="VnPayWebView"
+        component={VnPayWebView}
       />
     </Stack.Navigator>
   );
