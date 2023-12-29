@@ -6,10 +6,10 @@ import { Dimensions } from 'react-native';
 import axios from 'axios';
 
 const defaultColors = {
-  Salary: "#7D0A0A",
-  Bonus: "#52D3D8",
-  Allowance: "red",
-  Investment: "#E26EE5",
+  Salary: "#1A5D1A",
+  Bonus: "#7A9D54",
+  Allowance: "#597E52",
+  Investment: "#C1F2B0",
 };
 
 const ChartIncome = ({incomes}) => {

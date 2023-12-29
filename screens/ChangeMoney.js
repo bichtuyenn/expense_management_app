@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
-
+import { LinearGradient } from "expo-linear-gradient";
 const data = [
-  { label: 'Nhật Bản', value: 'JPY' },
-  { label: 'Việt Nam', value: 'VND' },
-  { label: 'Mỹ', value: 'USD' },
-  { label: 'Hàn Quốc', value: 'KRW' },
-  { label: 'Trung Quốc', value: 'CNY' }
+  { label: 'Japan', value: 'JPY' },
+  { label: 'Viet Nam', value: 'VND' },
+  { label: 'America', value: 'USD' },
+  { label: 'Korea', value: 'KRW' },
+  { label: 'Chinese', value: 'CNY' }
 ];
 
 const Activities = () => {
@@ -46,7 +46,7 @@ const Activities = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style = {{fontSize: 17}}>Enter amount:</Text>
+        <Text style = {{fontSize: 17,  textAlign: 'center',}}>Enter amount:</Text>
         <TextInput
           style={styles.input}
           keyboardType="numeric"
@@ -98,7 +98,16 @@ const Activities = () => {
           />
         )}
       />
-      <Button title="Convert" onPress={convertCurrency} style={styles.button}/>
+        <LinearGradient
+            colors={['#F875AA', '#BEADFA']}
+          style={styles.button}
+        >
+        <TouchableOpacity onPress={convertCurrency}>
+          <Text style = {{color: '#ffffff', fontSize: 18, fontWeight: 'bold'}}>Convert</Text>
+        </TouchableOpacity>
+        </LinearGradient>
+      
+
       {convertedAmount && (
         <Text style= {styles.trong}>
           {amount} {value} is equal to {convertedAmount} {value2}
@@ -113,9 +122,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 16,
     fontSize: 18,
+    height: '100%',
   },
   header: {
-    marginTop: 10
+    marginTop: 10, 
+    textAlign: 'center',
   },
   horizontalLine: {
     height: 1,
@@ -135,7 +146,8 @@ const styles = StyleSheet.create({
     marginRight: 5
   },
   input: {
-    fontSize: 17
+    fontSize: 17, 
+    textAlign: 'center',
   },
   label: {
     position: 'absolute',
@@ -161,9 +173,19 @@ const styles = StyleSheet.create({
     fontSize: 16
   },
   button: {
-    marginTop: 20
-  },
+    marginTop: 20,
+    padding: 10,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
 
+  },
+  trong: {
+    marginTop: 20,
+    fontSize: 17,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  }
 });
 
 export default Activities;

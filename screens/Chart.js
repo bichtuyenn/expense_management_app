@@ -6,11 +6,11 @@ import axios from 'axios';
 import { AuthContext } from './AuthContext';
 
 const defaultColors = {
-  Food: "#F00",
-  Transport: "#FFF7D4",
-  Entertainment: "red",
-  Shopping: "#E26EE5",
-  Rent: "#508D69",
+  Food: "#F8EDFF",
+  Transport: "#D8D9DA",
+  Entertainment: "#BACDDB",
+  Shopping: "#6096B4",
+  Rent: "#205375",
 };
 
 const Chart = ({expenses}) => {
@@ -65,6 +65,7 @@ const Chart = ({expenses}) => {
           }
           return acc;
         }, []);
+
         return newData;
       });
     }

@@ -62,6 +62,7 @@ const ChartYear = ({navigation}) => {
       <ScrollView>
         <View style = {styles.container}>
         <View style = {styles.chartline1}>
+          <Text style = {styles.text}>Yearly chart of expenses</Text>
         {dataChartYearExpenses? (
             <LineChart
               data={dataChartYearExpenses}
@@ -91,6 +92,7 @@ const ChartYear = ({navigation}) => {
             )}
         </View>
         <View style = {styles.chartline}>
+          <Text style = {styles.text}>Yearly chart of income</Text>
             {dataChartYearIncome? (
             <LineChart
               data={dataChartYearIncome}
@@ -126,16 +128,21 @@ const ChartYear = ({navigation}) => {
   const styles = StyleSheet.create({
 container: {
   flex: 1,
-  backgroundColor: 'white',
-  marginVertical: 30,
+  marginVertical: 10,
 },
-
 chartline: {
-  marginTop: 20,
+  marginTop: 10,
   marginRight: 20,
     },
 chartline1: {
   marginRight: 20,
+}
+, text: {
+  fontSize: 20,
+  fontWeight: 'bold',
+  textAlign: 'center',
+  marginVertical: 5,
+  color: '#000000',
 }
 });
   export default ChartYear;

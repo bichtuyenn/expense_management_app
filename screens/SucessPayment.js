@@ -4,6 +4,9 @@ import { useNavigation } from '@react-navigation/native';
 const { width: screenWidth } = Dimensions.get('window');
 
 const SucessPayment = ({ navigation }) => {
+  const onPressHandle = () => {
+    navigation.navigate('User');
+  }
   return (
   <View style = {styles.container}>
       <View>
@@ -19,13 +22,6 @@ const SucessPayment = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  //   container: {
-  //   flex: 1,
-  // },
-  // image: {
-  //   width: screenWidth,
-  //   height: '100%',
-  // }
   container: {
     flex: 1,
     position: 'relative',

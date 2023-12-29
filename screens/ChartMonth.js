@@ -139,7 +139,7 @@ const ChartMonth = () => {
           style={{borderRadius: 20}}
         >
         <Text style={[styles.button, {color:'#fff', fontSize:18, fontWeight: 'bold'}]}
-        >View chart of year
+        >View yearly chart
         </Text>
         </LinearGradient>
         </TouchableOpacity>
