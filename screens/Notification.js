@@ -361,6 +361,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     paddingLeft: 10,
     paddingRight: 10,
+    paddingBottom: 8,
   },
 
   arrowButton: {
