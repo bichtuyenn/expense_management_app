@@ -65,7 +65,6 @@ const Chart = ({expenses}) => {
           }
           return acc;
         }, []);
-        console.log("newDataExpense", newData);
         return newData;
       });
     }

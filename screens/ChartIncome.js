@@ -64,7 +64,6 @@ const ChartIncome = ({incomes}) => {
           }
           return acc;
         }, []);
-        console.log("newDataIncome", newData);
         return newData;
       });
     }

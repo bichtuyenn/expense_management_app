@@ -49,7 +49,6 @@ const Notification = ({ navigation }) => {
     },}
 )
     .then(response => {
-    console.log("true")
     setUpdateData(!updateData);
     navigation.navigate('Home')
     })

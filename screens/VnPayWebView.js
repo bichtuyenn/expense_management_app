@@ -26,16 +26,16 @@ const VnPayWebView = ({ navigation }) => {
     const { url } = event;
     Keyboard.dismiss();
     if (url.includes('success=ok')) {
-      axios.post(`http://134.209.108.2:3002/api/updateUser/${id}`, {
+      axios.put(`http://134.209.108.2:3002/api/updateUser/${id}`, {
         headers: {
           'Content-Type': 'application/json',
         },
       })
-      .then((response) => {console.log(response)})
+      .then((response) => {console.log(response)
+        setUpdateData(!updateData);
+        navigation.navigate('SucessPayment');
+        console.log('success')})
       .catch(error => console.log(error));
-      setUpdateData(!updateData);
-      navigation.navigate('SucessPayment');
-      console.log('success')
     } else if (url.includes('success=error')) {
       navigation.navigate('FailedPayment');
       console.log('error')

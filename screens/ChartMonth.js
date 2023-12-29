@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { SafeAreaView, StyleSheet, View, Text , ScrollView, TouchableOpacity} from 'react-native';
+import { SafeAreaView, StyleSheet, View, Text , ScrollView, TouchableOpacity, Alert} from 'react-native';
 import { PieChart } from 'react-native-chart-kit';
 import { Dimensions } from 'react-native';
 import axios from 'axios';
@@ -76,8 +76,8 @@ const styles = StyleSheet.create({
 });
 
 const ChartMonth = () => {
-    const navigation = useNavigation();
-  const { updateData, id, updateDataExpenses, setUpdateDataExpenses, updateDataIncome, setUpdateDataIncome } = useContext(AuthContext);
+  const navigation = useNavigation();
+  const { updateData, id, updateDataExpenses, setUpdateDataExpenses, updateDataIncome, setUpdateDataIncome, isPremium } = useContext(AuthContext);
   const [expenses, setExpenses] = useState([]);
   const [incomes, setIncomes] = useState([]);
   useEffect(() => {
@@ -99,6 +99,14 @@ const ChartMonth = () => {
     .catch(error => console.log(error));
   }, [updateData]);
 
+  const viewChartYearHandle = () => {
+    if (isPremium === true){
+      navigation.navigate('ChartYear');
+    }
+    else{
+      Alert.alert('Please buy premium');
+    }
+  }
   return (
  <ScrollView>
 <SafeAreaView style={styles.container}>
@@ -124,7 +132,7 @@ const ChartMonth = () => {
     <View style = {styles.buttonContainer}>
         <TouchableOpacity
           style={{borderRadius: 20}}
-          onPress={() => navigation.navigate('ChartYear')}
+          onPress={viewChartYearHandle}
         >
         <LinearGradient
           colors={['#F875AA', '#BEADFA']}

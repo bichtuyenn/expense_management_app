@@ -21,8 +21,9 @@ const Home = ({ route }) => {
       })
 
       .then(response => {
-        console.log(response.data.premium);
-        setIsPremium(response.data.premium)})
+        console.log('premium',response.data.data.premium);
+        setIsPremium(response.data.data.premium)}
+      )
       .catch(error => console.log(error));
 
       axios.get(`http://134.209.108.2:3002/api/getExpenses/${id}`, {
@@ -31,7 +32,6 @@ const Home = ({ route }) => {
         },}
     )
         .then(response => {
-        console.log("true")
         const reversedExpenses = response.data.reverse();
         setExpenses(reversedExpenses);
         })
@@ -49,7 +49,6 @@ const Home = ({ route }) => {
         },
       })
         .then(response => {
-          console.log("true")
           const reversedIncome = response.data.reverse();
           setIncome(reversedIncome);
         })

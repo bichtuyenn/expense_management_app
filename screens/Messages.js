@@ -93,7 +93,6 @@ const data = [
         },}
     )
         .then(response => {
-        console.log("true")
         setUpdateData(!updateData);
         // setUpdateDataExpenses(!updateDataExpenses);
         navigation.navigate('Home')

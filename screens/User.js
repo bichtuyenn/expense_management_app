@@ -7,7 +7,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 const Account = () => {
   const [isNotificationEnabled, setNotificationEnabled] = useState(false);
-  const {setisAuthenticated, isPremium, setIsPremium} = useContext(AuthContext);
+  const {setisAuthenticated, isPremium, setIsPremium, email} = useContext(AuthContext);
   const navigation = useNavigation();
   const changMoneyPressHandler = () => {
       navigation.navigate('ChangeMoney')
@@ -36,7 +36,7 @@ const Account = () => {
           style={styles.avatar}
         />
         <View style={styles.ratingContainer}>
-            <Text style={[styles.phone, {color : '#ffffff', fontWeight: 'bold'}]}>tuyen@gmail.com</Text>
+            <Text style={[styles.phone, {color : '#ffffff', fontWeight: 'bold'}]}>{email}</Text>
         </View>
   
       </LinearGradient>

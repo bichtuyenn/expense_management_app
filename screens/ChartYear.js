@@ -13,14 +13,6 @@ import axios from 'axios';
 import { AuthContext } from './AuthContext';
 import { useNavigation } from '@react-navigation/native';
 
-// const data = {
-//   labels: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
-//   datasets: [
-//     {
-//       data: [20, 45, 28, 80, 99, 10, 30, 50, 40, 70, 40, 50]
-//     }
-//   ]
-// };
 const ChartYear = ({navigation}) => {
   const [dataChartYearExpenses, setDataChartYearExpenses] = useState({
     labels: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
@@ -48,7 +40,6 @@ const ChartYear = ({navigation}) => {
       .then(response => {
       let data = response.data;
       setDataChartYearExpenses(data);
-      console.log(data);
       })
       .catch(error => {
       });
@@ -61,7 +52,6 @@ const ChartYear = ({navigation}) => {
       .then(response => {
       let data = response.data;
       setDataChartYearIncome(data);
-      console.log(data);
       })
       .catch(error => {
       });
