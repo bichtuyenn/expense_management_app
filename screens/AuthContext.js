@@ -1,5 +1,5 @@
-import React ,{createContext,useState} from 'react';
-
+import React ,{createContext,useState, useEffect} from 'react';
+import axios from 'axios';
 const AuthContext = createContext();
 
 const AuthProvider = ({children}) => {
@@ -10,9 +10,10 @@ const AuthProvider = ({children}) => {
     const [updateData, setUpdateData] = useState(false);
     const [updateDataIncome, setUpdateDataIncome] = useState(false);
     const [updateDataExpenses, setUpdateDataExpenses] = useState(false);
+    const [isPremium, setIsPremium] = useState(false);
     return (
         <AuthContext.Provider 
-            value={{id ,email, updateData, setUpdateData,updateDataExpenses, setUpdateDataExpenses,updateDataIncome, setUpdateDataIncome, setEmail,password,setId, setPassword,isAuthenticated,setisAuthenticated}}
+            value={{id ,email, updateData, setUpdateData,updateDataExpenses, setUpdateDataExpenses,updateDataIncome, setUpdateDataIncome, setEmail,password,setId, setPassword,isAuthenticated,setisAuthenticated, isPremium, setIsPremium}}
         >
             {children}
         </AuthContext.Provider>

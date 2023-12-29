@@ -8,12 +8,23 @@ import { AuthContext } from './AuthContext';
 import axios from 'axios';
 import { LinearGradient } from "expo-linear-gradient";
 const Home = ({ route }) => {
-    const {updateData, setUpdateData, id} = useContext(AuthContext);
+    const {updateData, setUpdateData, id, setIsPremium} = useContext(AuthContext);
     const [selectedtDate, setSelectedDate] = useState(new Date());
     const [expenses, setExpenses] = useState([]);
     const [income, setIncome] =useState([]);
     useEffect(() => {
       // console.log(id);
+      axios.get(`http://134.209.108.2:3002/api/getUser/${id}`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+
+      .then(response => {
+        console.log(response.data.premium);
+        setIsPremium(response.data.premium)})
+      .catch(error => console.log(error));
+
       axios.get(`http://134.209.108.2:3002/api/getExpenses/${id}`, {
         headers: {
           'Content-Type': 'application/json',
@@ -21,7 +32,8 @@ const Home = ({ route }) => {
     )
         .then(response => {
         console.log("true")
-        setExpenses(response.data);
+        const reversedExpenses = response.data.reverse();
+        setExpenses(reversedExpenses);
         })
         .catch(error => {
           console.log(error);
@@ -38,8 +50,8 @@ const Home = ({ route }) => {
       })
         .then(response => {
           console.log("true")
-          // console.log("income data :", response.data)
-          setIncome(response.data); // Fix here
+          const reversedIncome = response.data.reverse();
+          setIncome(reversedIncome);
         })
         .catch(error => {
           console.log(error);
@@ -69,7 +81,7 @@ const calculateTotalIncomeByCategory = (category) => {
 const totalSalary = calculateTotalIncomeByCategory('Salary');
 const totalBonus = calculateTotalIncomeByCategory('Bonus');
 const totalAllowance = calculateTotalIncomeByCategory('Allowance');
-const totalInvestment = calculateTotalIncomeByCategory('Investment money');
+const totalInvestment = calculateTotalIncomeByCategory('Investment');
 
  const calculateTotalIncome = () => {
       let totalIncome = 0;
@@ -118,20 +130,20 @@ const totalInvestment = calculateTotalIncomeByCategory('Investment money');
                     colors={['#FDCEDF', '#BEADFA']}
                     style={styles.header}
     >
-    <Text style={[styles.titleStyle, {marginBottom: 30}]}>EXPENSE MANAGEMENT</Text>
+    <Text style={[styles.titleStyle, {marginBottom: 30, fontWeight: 'bold', color: '#674188', fontSize: 23}]}> Statistic Results</Text>
     <View style = {styles.textheader}>
         <View style={styles.rowContainer}>
-            <Text style={styles.label}>Thu nhập:</Text>
+            <Text style={styles.label}>Income:</Text>
             <Text style={styles.value}>{calculateTotalIncome()} đ</Text>
         </View>
 
         <View style={styles.rowContainer}>
-            <Text style={styles.label}>Chi tiêu:</Text>
+            <Text style={styles.label}>Expenses:</Text>
             <Text style={styles.value}>{calculateTotalExpense()} đ</Text>
         </View>
 
         <View style={styles.rowContainer}>
-            <Text style={styles.label}>Số dư:</Text>
+            <Text style={styles.label}>Residual amount:</Text>
             <Text style={styles.value}>
               {calculateTotalIncome() - calculateTotalExpense()} đ
             </Text>
@@ -143,18 +155,18 @@ const totalInvestment = calculateTotalIncomeByCategory('Investment money');
         style={styles.body}
 >
     <View style={styles.expenseDetail}>
-      <Text style={styles.expenseHeader}>Chi tiêu</Text>
+      <Text style={styles.expenseHeader}>Expenses</Text>
       {expenses.length > 0 ? (
         <>
           {expenses.map((expense, index) => (
             <View key={index} style={styles.expenseRow}>
-              <Text style={styles.expenseCategory}>
-                {expense.categoriesExpenses}
-              </Text>
-              <View style={styles.expenseDetails}>
-                <Text>{expense.date}</Text>
-                <Text>- {parseFloat(expense.value || 0)} đ</Text>
-                <Text>{expense.note}</Text>
+              <View style={styles.expenseCategory}>
+                <Text style= {{fontWeight: 'bold'}}>{expense.categoriesExpenses}</Text>
+                <Text style= {{fontSize: 10}}>{expense.note}</Text>
+              </View>
+                <View style={styles.expenseDetails}>
+                  <Text style= {{color: '#D80032', fontWeight: 'bold', fontSize: 17}}>- {parseFloat(expense.value || 0)} đ</Text>
+                  <Text style= {{fontSize: 12}}>{expense.date}</Text>
               </View>
               {index < expenses.length - 1 && (
                 <View style={styles.divider} />
@@ -168,16 +180,18 @@ const totalInvestment = calculateTotalIncomeByCategory('Investment money');
     </View>
 
     <View style={styles.expenseDetail}>
-      <Text style={styles.expenseHeader}>Thu nhập</Text>
+      <Text style={styles.expenseHeader}>Income</Text>
       {income.length > 0 ? (
         <>
           {income.map((income, index) => (
             <View key={index} style={styles.expenseRow}>
-              <Text style={styles.expenseCategory}>{income.categoriesIncome}</Text>
+               <View style={styles.expenseCategory}>
+                  <Text style= {{fontWeight: 'bold'}}>{income.categoriesIncome}</Text>
+                  <Text style= {{fontSize: 10}}>{income.note}</Text>
+              </View>
               <View style={styles.expenseDetails}>
-                <Text>{income.date}</Text>
-                <Text>+ {parseFloat(income.value || 0)} đ</Text>
-                <Text>{income.note}</Text>
+                  <Text style= {{color: '#1F8A70', fontWeight: 'bold', fontSize: 17}}>+ {parseFloat(income.value || 0)} đ</Text>
+                  <Text style= {{fontSize: 12}}>{income.date}</Text>
               </View>
               {index < income.length - 1 && (
                 <View style={styles.divider} />
@@ -198,7 +212,7 @@ const totalInvestment = calculateTotalIncomeByCategory('Investment money');
 const styles = StyleSheet.create({
 container: {
   flex: 1,
-  backgroundColor: '#ffffff',
+  backgroundColor: '#FCE9F1',
   padding: 15,
   },
 header:{
@@ -206,7 +220,7 @@ header:{
   borderTopLeftRadius: 50,
   borderTopRightRadius: 50,
   paddingHorizontal: 20,
-  paddingVertical: 30,
+  paddingVertical: 20,
   // borderBottomLeftRadius: 20,
   // borderBottomRightRadius: 20,
 },
@@ -238,7 +252,7 @@ rowContainer: {
   marginTop: 10,
 },
 label: {
-fontWeight: 'bold',
+  fontWeight: 'bold',
 },
 value: {
   color: 'green',
@@ -252,22 +266,26 @@ expenseDetail: {
 expenseHeader: {
   fontWeight: 'bold',
   fontSize: 16,
-  marginBottom: 5,
+  marginBottom: 10,
 },
 expenseRow: {
   flexDirection: 'row',
   justifyContent: 'space-between',
+  // alignItems: 'center',
   alignItems: 'center',
   marginBottom: 5,
+  marginTop: 5,
 },
 expenseCategory: {
-flex: 1,
-marginRight: 5,
+  flex: 1,
+  // marginRight: 130,
+  // justifyContent: 'space-between',
+  // alignItems: 'center',
 },
 expenseDetails: {
-flex: 1,
-flexDirection: 'column',
-marginLeft: 5,
+  flex: 1,
+  // flexDirection: 'column',
+  marginLeft: 130,
 },
 divider: {
   height: 1,
@@ -275,11 +293,11 @@ divider: {
   marginVertical: 5,
 },
 chartContainer: {
-marginTop: 10,
-backgroundColor: 'white',
-borderRadius: 10,
-width: '100%',
-alignSelf: 'center',
+  marginTop: 10,
+  backgroundColor: 'white',
+  borderRadius: 10,
+  width: '100%',
+  alignSelf: 'center',
     }
 });
 export default Home;

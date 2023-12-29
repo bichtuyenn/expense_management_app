@@ -8,7 +8,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import { format } from 'date-fns';
 import { AuthContext } from './AuthContext';
 import axios from 'axios';
-
+import { LinearGradient } from 'expo-linear-gradient';
 const data = [
   { label: 'Food', value: '0' },
   { label: 'Rent', value: '0' },
@@ -103,9 +103,7 @@ const data = [
           // hien thi o da
         });
         // tao 1 cai object de gui len server
-
       }
-
       const nav = useNavigation();
       useFocusEffect(() => {
         setIsChatSelected(true);
@@ -130,9 +128,10 @@ const data = [
                   setIsChatSelected(true);
                   setIsNotificationSelected(false);
                 }}
-              >
-              <Text style={[styles.buttonText, isChatSelected ? styles.selectedText : {}]}>Expense</Text>
+            >
+            <Text style={[styles.buttonText, isChatSelected ? styles.selectedText : {}]}>Expense</Text>
           </TouchableOpacity>
+
           <TouchableOpacity
             style={[
               styles.button,
@@ -146,10 +145,10 @@ const data = [
           >
             <Text style={[styles.buttonText, isNotificationSelected ? styles.selectedText : {}]}>Income</Text>
           </TouchableOpacity>
-        </View>
+      </View>
         {isChatSelected ? (
         <View style= {styles.addContainer} >
-            <View>
+          <View style= {styles.calendarView}>
                 <CalendarPicker
                     startFromMonday={true}
                     allowRangeSelection={false}
@@ -173,7 +172,7 @@ const data = [
                     previousTitle="Previous"
                     nextTitle="Next"
                     todayBackgroundColor="#e6ffe6"
-                    selectedDayColor="#66ff33"
+                    selectedDayColor='#BEADFA'
                     selectedDayTextColor="#000000"
                     scaleFactor={375}
                     textStyle={{
@@ -184,7 +183,8 @@ const data = [
                   />
           </View>
           <View style={styles.horizontalLine} />
-            <View style = {styles.expense}>
+          <View style={styles.expenseContainer}>
+          <View style={[styles.expense, {borderTopLeftRadius: 20, borderTopRightRadius: 20}]}>
                 <Text style={styles.text}>Expense money</Text>
                 <TextInput
                     placeholder='000'
@@ -198,7 +198,6 @@ const data = [
                 <Text style={styles.text}>Date</Text>
                 <View>
                     <Text style={[styles.dateTimeNow, styles.input]}>{day}</Text>
-            
                 </View>
             </View>
             <View style={styles.expense}>
@@ -210,7 +209,7 @@ const data = [
                       style= {styles.input}
                 />
             </View>
-            <View style={styles.categoryContainer}>
+            <View style={[styles.categoryContainer, {borderBottomLeftRadius:20,borderBottomRightRadius:20, paddingBottom: 6}]}>
                 <Text style= {{fontSize : 18, marginRight: 8}}>Category</Text>
                 <Dropdown
                   style={styles.dropdown}
@@ -225,18 +224,20 @@ const data = [
                     setSelectedCategory(item.label);
                   }}
                 />
-
             </View>
-            </View>
-      
+        </View>
+    </View> 
         ) : null}
-          <Button 
-              labelStyle={{ color: '#ffffff', fontSize: 19, textAlign: 'center'}}
-              style= {styles.buttonAdd}
+         <TouchableOpacity
               onPress={handleSubmit}
-              >Enter your expense
-          </Button>
-          <Text style = {{marginBottom: 10}}></Text>
+          >
+            <LinearGradient
+                colors={['#F875AA', '#BEADFA']}
+                style= {styles.buttonAdd}
+            >
+            <Text style={{ color: '#ffffff', fontSize: 19, textAlign: 'center'}}>Enter your expense</Text>        
+            </LinearGradient>
+          </TouchableOpacity> 
       </View>
   </ScrollView>
     );
@@ -244,6 +245,7 @@ const data = [
   const styles = StyleSheet.create({
     container: {
       flex: 1,
+      backgroundColor: '#FCE9F1'
     },
     title: {
       fontSize: 28,
@@ -254,25 +256,34 @@ const data = [
     buttonContainer: {
       flexDirection: 'row',
       justifyContent: 'space-between',
-      paddingHorizontal: 10,
-      marginVertical: 10,
+      paddingHorizontal: 2,
+      marginVertical: 2,
+      borderRadius: 15,
+      backgroundColor: '#ffffff',
+      marginLeft:10,
+      marginRight:10,
     },
     button: {
       flex: 1,
-      borderRadius: 10,
-      padding: 10,
-      marginRight: 10,
-      marginTop: 20,
+      borderRadius: 15,
+      marginTop: 5,
+      marginBottom: 5,
+      textAlign: 'center',
+      justifyContent:'center', 
     },
     selectedButton: {
-      backgroundColor: '#88AB8E',
+      borderRadius: 15,
+      backgroundColor: '#ED9ED6',
     },
     buttonText: {
       textAlign: 'center',
+      justifyContent:'center', 
       fontSize: 18,
     },
     selectedText: {
       color: 'white',
+      paddingTop: 15,
+      paddingBottom: 15,
     },
     chatItem: {
       flexDirection: 'row',
@@ -281,31 +292,11 @@ const data = [
       borderBottomWidth: 1,
       borderColor: '#ccc',
     },
-    avatar: {
-      width: 50,
-      height: 50,
-      borderRadius: 25,
-    },
     textContainer: {
       marginLeft: 16,
     },
-    name: {
-      fontSize: 18,
-      fontWeight: 'bold',
-    },
     lastMessage: {
       fontSize: 16,
-
-    },
-    addContainer: {
-        flex:1,
-        backgroundColor:"#B4B4B3",
-    },
-    icon:{
-        borderRadius: 20,
-        backgroundColor: '#F3B664',
-        padding: 6,
-        // marginRight: 10,
     },
     label: {
       position: 'absolute',
@@ -318,21 +309,21 @@ const data = [
     },
     dateTimeNow:{
         padding: 7,
-        backgroundColor: '#B4B4B3',
+        // backgroundColor: '#B4B4B3',
         borderRadius: 10,
     },
     addContainer: {
-        padding: 15,
+        padding: 10,
         borderRadius: 10,
-        marginLeft: 5,
-        marginRight: 5,
-        backgroundColor: '#ffffff'
     },
     expense: {
         flexDirection: 'row',
         alignContent: 'center',
         alignItems: 'center',
-        marginBottom: 5,
+        // marginBottom: 5,
+        backgroundColor: '#ffffff',
+        paddingLeft: 10,
+        paddingRight: 10,
     },
     text:{
       marginRight: 10,
@@ -343,17 +334,14 @@ const data = [
       fontSize: 17,    
     },
     buttonAdd:{
-      backgroundColor: '#88AB8E',
-      marginTop: 10,
-      marginLeft: 20,
-      marginRight: 20,
-      padding: 2,
+      marginTop: 0,
+      marginLeft: 10,
+      marginRight: 10,
       borderRadius: 15,
+      marginBottom: 30,
+      paddingBottom: 10,
+      paddingTop: 12,
     },
-    flatListContainer: {
-      marginTop: 10, // Khoảng cách giữa FlatList và phần trên nó
-    },
-  
     categoryItem: {
       padding: 10,
       marginRight: 10,
@@ -361,10 +349,6 @@ const data = [
       borderRadius: 5,
       borderColor: '#ccc',
     },
-    selectedCategoryItem: {
-      backgroundColor: '#79AC78',
-    },
-  
     categoryText: {
       fontSize: 17,
     },
@@ -375,6 +359,7 @@ const data = [
       borderWidth: 0.5,
       borderRadius: 8,
       paddingHorizontal: 8,
+      
     },
   
     toggleCategoriesButton: {
@@ -387,7 +372,6 @@ const data = [
     flatList: {
       marginTop: 10,
     },
-  
     toggleCategoriesButton: {
       backgroundColor: '#ccc',
       padding: 10,
@@ -396,17 +380,26 @@ const data = [
       marginVertical: 10,
     },
     horizontalLine: {
-      height: 1,
-      backgroundColor: '#ccc',
-      marginVertical: 10,
+      marginVertical: 8,
       },
     categoryContainer: {
       flexDirection: 'row',
       alignItems: 'center',
+      backgroundColor: '#ffffff',
+      paddingLeft: 10,
+      paddingRight: 10,
     },
-  
+    expenseContainer:{
+      flexDirection: 'column',
+      backgroundColor: '#ffffff'
+    },
     arrowButton: {
       padding: 10,
+    },
+    calendarView:{
+      backgroundColor: '#ffffff',
+      borderRadius: 10,
+      padding: 0,
     },
   
   });

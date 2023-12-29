@@ -3,6 +3,8 @@ import { createStackNavigator } from '@react-navigation/stack'
 import ChangeMoney from './ChangeMoney';
 import Premium from './Premium';
 import VnPayWebView from './VnPayWebView';
+import FailedPayment from './FailedPayment';
+import SucessPayment from './SucessPayment';
 const Stack = createStackNavigator()
 const AccountStack = () => {
   return (
@@ -22,6 +24,14 @@ const AccountStack = () => {
       <Stack.Screen
         name="VnPayWebView"
         component={VnPayWebView}
+      />
+      <Stack.Screen
+        name="SucessPayment"
+        component={SucessPayment}
+      />
+      <Stack.Screen
+        name="FailedPayment"
+        component={FailedPayment}
       />
     </Stack.Navigator>
   );

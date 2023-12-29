@@ -8,11 +8,12 @@ import { Dropdown } from 'react-native-element-dropdown';
 import { format } from 'date-fns';
 import axios from 'axios';
 import { AuthContext } from './AuthContext';
+import { LinearGradient } from 'expo-linear-gradient';
 const data = [
   { label: 'Salary', value: '0' },
   { label: 'Allowance', value: '0' },
   { label: 'Bonus', value: '0'},
-  { label: 'Investment money', value: '0' },
+  { label: 'Investment', value: '0' },
 ];
 const Notification = ({ navigation }) => {
   const {id, updateData, setUpdateData} = useContext(AuthContext);
@@ -125,13 +126,13 @@ const renderItem = ({ item }) => (
             setIsNotificationSelected(true);
           }}
         >
-          <Text style={[styles.buttonText, isNotificationSelected ? styles.selectedText : {}]}>Income</Text>
+        <Text style={[styles.buttonText, isNotificationSelected ? styles.selectedText : {}]}>Income</Text>
         </TouchableOpacity>
       </View>
       
       {!isChatSelected ? (
         <View style= {styles.addContainer} >
-            <View>
+            <View style= {styles.calendarView}>
                 <CalendarPicker
                     startFromMonday={true}
                     allowRangeSelection={false}
@@ -166,6 +167,7 @@ const renderItem = ({ item }) => (
                   />
         </View>
         <View style={styles.horizontalLine} />
+        <View style={styles.expenseContainer}>
         <View style = {styles.expense}>
             <Text style={styles.text}>Expense money</Text>
             <TextInput
@@ -192,7 +194,7 @@ const renderItem = ({ item }) => (
             />
         </View>
         <View style={styles.categoryContainer}>
-                <Text style= {{fontSize : 18, marginRight: 8}}>Category</Text>
+                <Text style= {{fontSize : 18, marginRight: 8, paddingBottom: 6}}>Category</Text>
                 <Dropdown
                   style={styles.dropdown}
                   data={data}
@@ -208,12 +210,18 @@ const renderItem = ({ item }) => (
                 />
         </View>
     </View>
+  </View> 
     ) : null}
-      <Button 
-          labelStyle={{ color: '#ffffff', fontSize: 19, textAlign: 'center'}}
-          style= {styles.buttonAdd}
-          onPress={handleSubmitIncome} 
-          >Enter your income</Button>
+        <TouchableOpacity
+              onPress={handleSubmitIncome}
+          >
+            <LinearGradient
+                colors={['#F875AA', '#BEADFA']}
+                style= {styles.buttonAdd}
+            >
+            <Text style={{ color: '#ffffff', fontSize: 19, textAlign: 'center'}}>Enter your income</Text>        
+            </LinearGradient>
+        </TouchableOpacity> 
   </View>
 </ScrollView>
   );
@@ -221,6 +229,7 @@ const renderItem = ({ item }) => (
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#FCE9F1'
   },
   title: {
     fontSize: 28,
@@ -231,30 +240,37 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 10,
-    marginVertical: 10,
+    paddingHorizontal: 2,
+    marginVertical: 2,
+    borderRadius: 15,
+    backgroundColor: '#ffffff',
+    marginLeft:10,
+    marginRight:10,
   },
   button: {
     flex: 1,
-    borderRadius: 10,
-    padding: 10,
-    marginRight: 10,
-    marginTop: 20,
+    borderRadius: 15,
+    marginTop: 5,
+    marginBottom: 5,
+    textAlign: 'center',
+    justifyContent:'center', 
   },
   selectedButton: {
-    backgroundColor: '#88AB8E',
+    borderRadius: 15,
+    backgroundColor: '#ED9ED6',
   },
   buttonText: {
     textAlign: 'center',
+    justifyContent:'center', 
     fontSize: 18,
   },
   selectedText: {
     color: 'white',
+    paddingTop: 15,
+    paddingBottom: 15,
   },
   horizontalLine: {
-    height: 1,
-    backgroundColor: '#ccc',
-    marginVertical: 10,
+    marginVertical: 8,
     },
   chatItem: {
     flexDirection: 'row',
@@ -263,49 +279,32 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: '#ccc',
   },
-  avatar: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-  },
   textContainer: {
     marginLeft: 16,
   },
-  name: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
   lastMessage: {
     fontSize: 16,
-
   },
   addContainer: {
-      flex:1,
-      backgroundColor:"#B4B4B3",
-  },
-  icon:{
-      borderRadius: 20,
-      backgroundColor: '#F3B664',
-      padding: 5
+    padding: 10,
+    borderRadius: 10,
   },
   dateTimeNow:{
       padding: 7,
-      backgroundColor: '#B4B4B3',
       borderRadius: 10,
-      fontSize: 17
   },
   addContainer: {
-      padding: 10,
-      borderRadius: 10,
-      marginLeft: 5,
-      marginRight: 5,
-      backgroundColor: '#ffffff'
+    padding: 10,
+    borderRadius: 10,
   },
   expense: {
     flexDirection: 'row',
     alignContent: 'center',
     alignItems: 'center',
-    marginBottom: 5,
+    // marginBottom: 5,
+    backgroundColor: '#ffffff',
+    paddingLeft: 10,
+    paddingRight: 10,
   },
   text:{
     marginRight: 10,
@@ -316,18 +315,14 @@ const styles = StyleSheet.create({
     fontSize: 17
   },
   buttonAdd:{
-    backgroundColor: '#88AB8E',
-    marginTop: 10,
+    marginTop: 0,
     marginLeft: 20,
     marginRight: 20,
-    padding: 2,
     borderRadius: 15,
-    fontSize: 17
+    marginBottom: 30,
+    paddingBottom: 10,
+    paddingTop: 12,
   },
-  flatListContainer: {
-    marginTop: 10, 
-  },
-
   categoryItem: {
     padding: 10,
     marginRight: 10,
@@ -335,10 +330,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderColor: '#ccc',
   },
-  selectedCategoryItem: {
-    backgroundColor: '#007ACC',
-  },
-
   categoryText: {
     fontSize: 17,
   },
@@ -368,6 +359,9 @@ const styles = StyleSheet.create({
   categoryContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: '#ffffff',
+    paddingLeft: 10,
+    paddingRight: 10,
   },
 
   arrowButton: {
@@ -381,7 +375,15 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 8,
   },
-
+  calendarView:{
+    backgroundColor: '#ffffff',
+    borderRadius: 10,
+    padding: 0,
+  },
+  expenseContainer:{
+    flexDirection: 'column',
+    backgroundColor: '#ffffff'
+  },
 });
 
 

@@ -89,11 +89,11 @@ const Chart = ({expenses}) => {
       <View>
         <PieChart
           data={data}
-          width={screenWidth}
+          width={370}
           height={220}
           chartConfig={chartConfig}
           accessor={"population"}
-          backgroundColor={"#FFFFFF"}
+          backgroundColor={"#ffffff"}
         />
       </View>
     </SafeAreaView>
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: '#ecf0f1',
+    backgroundColor: '#FCE9F1',
   },
 });
 

@@ -1,14 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { WebView } from 'react-native-webview';
-
-// Hàm trả về một số nguyên ngẫu nhiên trong khoảng từ min đến max (bao gồm cả min và max)
+import { Keyboard , TouchableWithoutFeedback, ScrollView} from 'react-native';
+import {AuthContext} from './AuthContext';
+import axios from 'axios';
 function getRandomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-
-// Hàm tạo số nguyên ngẫu nhiên có độ dài n ký tự
 function generateRandomNumberWithLength(length) {
   let randomNumber = '';
   for (let i = 0; i < length; i++) {
@@ -19,30 +18,42 @@ function generateRandomNumberWithLength(length) {
 }
 
 const VnPayWebView = ({ navigation }) => {
+  const {isPremium, setIsPremium, id,updateData, setUpdateData} = useContext(AuthContext);
   const randomOrderId = generateRandomNumberWithLength(10);
-  const paymentUrl = `http://134.209.108.2:8888/order/create_payment_url?amount=10000&orderId=${randomOrderId}`;
+  const paymentUrl = `http://134.209.108.2:8888/order/create_payment_url?amount=300000&orderId=${randomOrderId}`;
 
   const handleNavigation = (event) => {
     const { url } = event;
+    Keyboard.dismiss();
     if (url.includes('success=ok')) {
-      // navigation.navigate('PaymentSuccess');
+      axios.post(`http://134.209.108.2:3002/api/updateUser/${id}`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then((response) => {console.log(response)})
+      .catch(error => console.log(error));
+      setUpdateData(!updateData);
+      navigation.navigate('SucessPayment');
       console.log('success')
     } else if (url.includes('success=error')) {
+      navigation.navigate('FailedPayment');
       console.log('error')
     }
   };
 
   useEffect(() => {
     return () => {
-      // Hàm cleanup nếu cần
     };
   }, []);
 
   return (
+    <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ flexGrow: 1 }}>
     <WebView
       source={{ uri: paymentUrl }}
       onNavigationStateChange={handleNavigation}
     />
+    </ScrollView>
   );
 };
 

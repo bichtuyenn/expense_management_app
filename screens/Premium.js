@@ -70,7 +70,6 @@ return (
                 <LinearGradient
                     colors={['#64CCC5', '#088395']}  style={styles.priceBox} >
                         <View>
-                             {/* <IonIcon name="sunny-outline" size={30} color="#fff" /> */}
                              <Feather name="smile" size={25} color="#fff" />
                         </View>
                         <View>
@@ -85,9 +84,9 @@ return (
         </View>
         <View>
             <TouchableOpacity 
-                style={styles.button}
+                style={styles.button} onPress={() => navigation.navigate('User')}
             >
-                <Text style= {{color: '#7B8FA1', fontWeight: '700'}}>NOT NOW</Text>
+                <Text style= {{color: '#7B8FA1', fontWeight: '700', marginBottom: 30}}>NOT NOW</Text>
             </TouchableOpacity>
         </View>
       <Text></Text>
@@ -103,6 +102,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
+        height: 'auto',
       },
       header:{
         flex: 1,

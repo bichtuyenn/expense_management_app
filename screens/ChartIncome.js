@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState, useContext } from 'react';
-import { SafeAreaView, StyleSheet, View } from 'react-native';
+import { SafeAreaView, StyleSheet, View , Text} from 'react-native';
 import { PieChart } from 'react-native-chart-kit';
 import { Dimensions } from 'react-native';
 import axios from 'axios';
@@ -9,7 +9,7 @@ const defaultColors = {
   Salary: "#7D0A0A",
   Bonus: "#52D3D8",
   Allowance: "red",
-  'Investment money': "#E26EE5",
+  Investment: "#E26EE5",
 };
 
 const ChartIncome = ({incomes}) => {
@@ -85,14 +85,14 @@ const ChartIncome = ({incomes}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View>
+      <View style={styles.chartContainer}>
         <PieChart
           data={data}
-          width={screenWidth}
+          width={370}
           height={220}
           chartConfig={chartConfig}
           accessor={"population"}
-          backgroundColor={"#FFFFFF"}
+          backgroundColor={"#ffffff"}
         />
       </View>
     </SafeAreaView>
@@ -103,8 +103,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: '#ecf0f1',
+    backgroundColor: '#FCE9F1',
   },
+  chartContainer:{
+    borderRadius: 10,
+  }
 });
 
 export default ChartIncome;

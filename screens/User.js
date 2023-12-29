@@ -3,10 +3,11 @@ import { View, Text, StyleSheet, Image, Switch, TouchableOpacity, ScrollView, Bu
 import IonIcon from "react-native-vector-icons/Ionicons";
 import { useNavigation } from '@react-navigation/native';
 import {AuthContext} from './AuthContext';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const Account = () => {
   const [isNotificationEnabled, setNotificationEnabled] = useState(false);
-  const {setisAuthenticated} = useContext(AuthContext);
+  const {setisAuthenticated, isPremium, setIsPremium} = useContext(AuthContext);
   const navigation = useNavigation();
   const changMoneyPressHandler = () => {
       navigation.navigate('ChangeMoney')
@@ -21,31 +22,37 @@ const Account = () => {
   return (
 <ScrollView>
     <View style={styles.container}>
-      <View style={styles.profileContainer}>
+      <LinearGradient
+          colors={['#FDCEDF', '#BEADFA']}
+          style={styles.profileContainer}
+        >
+        {isPremium? (
+              <View>
+              <Image source={require('../assets/crown.png')} style= {styles.images}/>
+              </View>
+        ): null}
         <Image
           source={require('../assets/cute3.png')}
           style={styles.avatar}
         />
         <View style={styles.ratingContainer}>
-          <Text style={styles.phone}>tuyen@gmail.com</Text>
+            <Text style={[styles.phone, {color : '#ffffff', fontWeight: 'bold'}]}>tuyen@gmail.com</Text>
         </View>
-      </View>
+  
+      </LinearGradient>
       <View style={styles.separator} />
-      {/* <View style={styles.notificationContainer}>
-        <Text style={styles.notificationText}>Notifications</Text>
-        <Switch
-          value={isNotificationEnabled}
-          onValueChange={() => setNotificationEnabled(!isNotificationEnabled)}
-        />
-      </View> */}
-      <TouchableOpacity
-        style={styles.menuItem}
-        onPress={() => premiumHandler()}
-      >
-        <Image source={require('../assets/crown.png')} style= {styles.images}/>
-        <Text style={[styles.menuText, { fontWeight: 'bold' }]}>Premium</Text>
-      </TouchableOpacity>
-
+      {!isPremium? (
+        <TouchableOpacity
+            style={[
+              styles.menuItem,
+              isPremium ? styles.premiumTurn : {},
+            ]}
+          onPress={() => premiumHandler()}
+        >
+          <Image source={require('../assets/crown.png')} style= {styles.images}/>
+          <Text style={[styles.menuText, { fontWeight: 'bold'}]}>Upgrade Premium</Text>
+        </TouchableOpacity>
+      ): null}
       <View style={styles.menuItem}>
         <IonIcon name="wallet-outline" size={25} color="#4390f7" />
         <Text style={styles.menuText}> My vallet</Text>
@@ -68,14 +75,17 @@ const Account = () => {
         <IonIcon name="settings-outline" size={25} color="#4390f7" />
         <Text style={styles.menuText}> Setting</Text>
       </View>
-
+      <LinearGradient
+          colors={['#F875AA', '#BEADFA']}
+         style={[styles.menuItem, styles.logoutButton]}
+        >
       <TouchableOpacity
-          style={[styles.menuItem, styles.logoutButton]}
+          //style={[styles.menuItem, styles.logoutButton]}
           onPress={handleLogout}
         >
-        <Text style={styles.menuText}>LOG OUT</Text>
+        <Text style={[styles.menuText,{color : '#ffffff'}]}>LOG OUT</Text>
       </TouchableOpacity>
-
+      </LinearGradient>
     </View>
 </ScrollView>
   );
@@ -84,7 +94,7 @@ const Account = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#FCE9F1'
   },
   images:{
     width: 32,
@@ -93,7 +103,6 @@ const styles = StyleSheet.create({
   profileContainer: {
     alignItems: 'center',
     padding: 20,
-    backgroundColor: '#88AB8E',
   },
   avatar: {
     width: 100,
@@ -140,10 +149,8 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     textAlign: 'center',
     alignSelf: 'center',
-    // color: '#FFC436'
   },
   logoutButton: {
-    backgroundColor: '#88AB8E',
     borderRadius: 8,
     marginTop: 10,
     alignSelf: 'center',
@@ -152,14 +159,14 @@ const styles = StyleSheet.create({
     padding: 15,
     width: 200,
     height: 50,
-     marginBottom: 20
+     marginBottom: 50,
+     color: '#ffffff'
   },
    
   buttonText: {
     color: 'white',              
     fontSize: 18,               
-    textAlign: 'center',
-            
+    textAlign: 'center',        
   },
 });
 
