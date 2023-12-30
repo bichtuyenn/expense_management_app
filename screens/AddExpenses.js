@@ -16,10 +16,10 @@ const data = [
   { label: 'Entertainment', value: '0' },
   { label: 'Transport', value: '0'}
 ];
-  const Messages = ({ navigation }) => {
+  const AddExpenses = ({ navigation }) => {
     const {id, updateData, setUpdateData,updateDataExpenses, setUpdateDataExpenses} = useContext(AuthContext);
-      const [isChatSelected, setIsChatSelected] = useState(true);
-      const [isNotificationSelected, setIsNotificationSelected] = useState(false);
+      const [isAddExpensesSelected, setIsAddExpensesSelected] = useState(true);
+      const [isAddIncomeSelected, setIsAddIncomeSelected] = useState(false);
       const [number, setNumber] = React.useState('');
       const [text, setText] = React.useState('');
       const [expenses, setExpenses] =useState([]);
@@ -105,8 +105,8 @@ const data = [
       }
       const nav = useNavigation();
       useFocusEffect(() => {
-        setIsChatSelected(true);
-        setIsNotificationSelected(false);
+        setIsAddExpensesSelected(true);
+        setIsAddIncomeSelected(false);
       });
 
       const handleDropdownFocus = () => {
@@ -121,31 +121,31 @@ const data = [
            <TouchableOpacity
                 style={[
                   styles.button,
-                  isChatSelected ? styles.selectedButton : {},
+                  isAddExpensesSelected ? styles.selectedButton : {},
                 ]}
                 onPress={() => {
-                  setIsChatSelected(true);
-                  setIsNotificationSelected(false);
+                  setIsAddExpensesSelected(true);
+                  setIsAddIncomeSelected(false);
                 }}
             >
-            <Text style={[styles.buttonText, isChatSelected ? styles.selectedText : {}]}>Expense</Text>
+            <Text style={[styles.buttonText, isAddExpensesSelected ? styles.selectedText : {}]}>Expense</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={[
               styles.button,
-              isNotificationSelected ? styles.selectedButton : {},
+              isAddIncomeSelected ? styles.selectedButton : {},
             ]}
             onPress={() => {
-              setIsChatSelected(false);
-              setIsNotificationSelected(true);
-              navigation.navigate('Notification');
+              setIsAddExpensesSelected(false);
+              setIsAddIncomeSelected(true);
+              navigation.navigate('AddIncome');
             }}
           >
-            <Text style={[styles.buttonText, isNotificationSelected ? styles.selectedText : {}]}>Income</Text>
+            <Text style={[styles.buttonText, isAddIncomeSelected ? styles.selectedText : {}]}>Income</Text>
           </TouchableOpacity>
       </View>
-        {isChatSelected ? (
+        {isAddExpensesSelected ? (
         <View style= {styles.addContainer} >
           <View style= {styles.calendarView}>
                 <CalendarPicker
@@ -402,4 +402,4 @@ const data = [
     },
   
   });
-  export default Messages;
+  export default AddExpenses;

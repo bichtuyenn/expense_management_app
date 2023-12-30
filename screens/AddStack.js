@@ -1,23 +1,23 @@
 import React from 'react'
 import {createStackNavigator} from '@react-navigation/stack';
-import Messages from './Messages';
-import Notification from './Notification';
+import AddExpenses from './AddExpenses';
+import AddIncome from './AddIncome';
 
 const Stack = createStackNavigator();
-const AddExpense = ()  => {
+const AddStack = ()  => {
   return (
     <Stack.Navigator>
          <Stack.Screen 
-            name="Messages" 
-            component={Messages} 
+            name="AddExpenses" 
+            component={AddExpenses} 
             options={{headerShown:false}}
         />
         <Stack.Screen 
-            name="Notification" 
-            component={Notification} 
+            name="AddIncome" 
+            component={AddIncome} 
             options={{headerShown:false}}
         />
     </Stack.Navigator>
   );
 }
-export default AddExpense;
+export default AddStack;

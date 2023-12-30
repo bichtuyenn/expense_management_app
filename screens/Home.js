@@ -1,9 +1,5 @@
 import {View, Text , StyleSheet, SafeAreaView, FlatList, ScrollView} from 'react-native'
-import CalendarPicker from 'react-native-calendar-picker';
 import React, { useState, useEffect, useContext } from 'react';
-import { PieChart } from 'react-native-chart-kit';
-import Chart from './Chart';
-import ChartIncome from './ChartIncome';
 import { AuthContext } from './AuthContext';
 import axios from 'axios';
 import { LinearGradient } from "expo-linear-gradient";
@@ -252,6 +248,7 @@ rowContainer: {
 },
 label: {
   fontWeight: 'bold',
+  textAlign:'center'
 },
 value: {
   color: 'green',
@@ -266,6 +263,7 @@ expenseHeader: {
   fontWeight: 'bold',
   fontSize: 16,
   marginBottom: 10,
+  textAlign:'center'
 },
 expenseRow: {
   flexDirection: 'row',
@@ -284,7 +282,7 @@ expenseCategory: {
 expenseDetails: {
   flex: 1,
   // flexDirection: 'column',
-  marginLeft: 130,
+  marginLeft: 170,
 },
 divider: {
   height: 1,

@@ -3,7 +3,7 @@ import ChartYear from './ChartYear'
 import ChartMonth from './ChartMonth';
 
 const Stack = createStackNavigator()
-const Activities = () => {
+const ChartStack = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -17,4 +17,4 @@ const Activities = () => {
     </Stack.Navigator>
   );
 }
-export default  Activities;
+export default  ChartStack;

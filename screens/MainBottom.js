@@ -2,9 +2,9 @@ import React from 'react';
 import IonIcon from "react-native-vector-icons/Ionicons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from './Home';
-import Activities from './Activities';
-import Account from './Account';
-import AddExpense from './AddExpense';
+import ChartStack from './ChartStack';
+import AccountStack from './AccountStack';
+import AddStack from './AddStack';
 
 const Bottom = createBottomTabNavigator();
 
@@ -26,9 +26,9 @@ const MainBottom = () => {
   return (
     <Bottom.Navigator>
       <Bottom.Screen name="Home" component={Home} options={homeScreenOptions(false, "Home", "home-outline")} />
-      <Bottom.Screen name="Chart" component={Activities} options={homeScreenOptions(false, "Chart", "cellular-outline")} />
-      <Bottom.Screen name="AddExpense" component={AddExpense} options={homeScreenOptions(false, "Add Expense", "add-circle-outline")} />
-      <Bottom.Screen name="Account" component={Account} options={homeScreenOptions(false, "Account", "person-outline")} />
+      <Bottom.Screen name="Chart" component={ChartStack} options={homeScreenOptions(false, "Chart", "cellular-outline")} />
+      <Bottom.Screen name="Add" component={AddStack} options={homeScreenOptions(false, "Add", "add-circle-outline")} />
+      <Bottom.Screen name="Account" component={AccountStack} options={homeScreenOptions(false, "Account", "person-outline")} />
     </Bottom.Navigator>
   );
 };

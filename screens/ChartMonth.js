@@ -42,9 +42,9 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: '#F2AFEF',
     position: 'relative',
-    height: 100,
-    borderBottomLeftRadius: 30,
-    borderBottomRightRadius: 30,
+    height: 180,
+    borderBottomLeftRadius: 50,
+    borderBottomRightRadius: 50,
   },
   body: {
       marginTop: -30,
@@ -72,10 +72,29 @@ const styles = StyleSheet.create({
   },
   body1: {
     borderRadius: 20,
-  }
+  },
+  rowContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+  },
+  label: {
+    fontWeight: 'bold',
+    textAlign:'center'
+  },
+  value: {
+    color: 'green',
+  },
+  textheader:{
+    backgroundColor: '#ffffff',
+    borderRadius: 15,
+    margin: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 10
+  },
 });
 
-const ChartMonth = () => {
+const ChartMonth = ({route}) => {
   const navigation = useNavigation();
   const { updateData, id, updateDataExpenses, setUpdateDataExpenses, updateDataIncome, setUpdateDataIncome, isPremium } = useContext(AuthContext);
   const [expenses, setExpenses] = useState([]);
@@ -86,7 +105,7 @@ const ChartMonth = () => {
         'Content-Type': 'application/json',
       },
     })
-    .then(response => setExpenses(response.data))
+    .then(response => {setExpenses(response.data)})
     .catch(error => console.log(error));
 
 
@@ -99,6 +118,36 @@ const ChartMonth = () => {
     .catch(error => console.log(error));
   }, [updateData]);
 
+ const calculateTotalIncomeMonth = () => {
+      let totalIncomeMonth = 0;
+      incomes.forEach((income) => {
+        const numberIncome = parseFloat(income.value || 0);
+        totalIncomeMonth += numberIncome;
+      });
+      return totalIncomeMonth;
+ };
+ const totalIncomeMonth = calculateTotalIncomeMonth();
+  useEffect(() => {
+      if (route.params && route.params.income) {
+        setIncome(route.params.income);
+      }
+    }, [route.params]);
+
+  useEffect(() => {
+      if (route.params && route.params.expenses) {
+        setExpenses(route.params.expenses);
+      }
+    }, [route.params]);
+
+  const calculateTotalExpensesMonth = () => {
+      let totalExpense = 0;
+      expenses.forEach((expense) => {
+        const number = parseFloat(expense.value || 0);
+        totalExpense += number;
+      });
+      return totalExpense;
+    };
+    const totalExpensesMonth = calculateTotalExpensesMonth();
   const viewChartYearHandle = () => {
     if (isPremium === true){
       navigation.navigate('ChartYear');
@@ -111,6 +160,25 @@ const ChartMonth = () => {
  <ScrollView>
 <SafeAreaView style={styles.container}>
     <View style = {styles.header}>
+      <View style = {styles.textheader}>
+        <View style={styles.rowContainer}>
+            <Text style={styles.label}>Income:</Text>
+            <Text style={styles.value}>{totalIncomeMonth} đ</Text>
+        </View>
+
+        <View style={styles.rowContainer}>
+            <Text style={styles.label}>Expenses:</Text>
+            <Text style={styles.value}>{totalExpensesMonth} đ</Text>
+        </View>
+
+        <View style={styles.rowContainer}>
+            <Text style={styles.label}>Residual amount:</Text>
+            <Text style={styles.value}>
+              {totalIncomeMonth - totalExpensesMonth} đ
+            </Text>
+        </View>
+      </View>
+
     </View>
     <View style = {styles.body}>
       <View style = {styles.body1}>
