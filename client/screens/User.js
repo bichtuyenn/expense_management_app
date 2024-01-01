@@ -1,5 +1,5 @@
 import React, { useState,  useContext  } from 'react';
-import { View, Text, StyleSheet, Image, Switch, TouchableOpacity, ScrollView, Button } from 'react-native';
+import { View, Text, StyleSheet, Image, Switch, TouchableOpacity, ScrollView, Button, Alert } from 'react-native';
 import IonIcon from "react-native-vector-icons/Ionicons";
 import { useNavigation } from '@react-navigation/native';
 import {AuthContext} from './AuthContext';
@@ -15,10 +15,27 @@ const Account = () => {
   const premiumHandler = () => {
     navigation.navigate('Premium')
 }
-  const handleLogout = () => {
-    setisAuthenticated(false);
-    console.log('Logged Out!');
-  };
+const handleLogout = () => {
+  Alert.alert(
+    'Confirmation',
+    'Are you sure you want to log out?',
+    [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+      {
+        text: 'Logout',
+        onPress: () => {
+          setisAuthenticated(false);
+          navigation.navigate('Login');
+          console.log('Logged Out!');
+        },
+      },
+    ],
+    { cancelable: false }
+  );
+}
   return (
 <ScrollView>
     <View style={styles.container}>
