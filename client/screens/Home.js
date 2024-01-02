@@ -3,6 +3,10 @@ import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from './AuthContext';
 import axios from 'axios';
 import { LinearGradient } from "expo-linear-gradient";
+import { Dimensions } from 'react-native';
+
+const windowHeight = Dimensions.get('window').height;
+
 const Home = ({ route }) => {
     const {updateData, setUpdateData, id, setIsPremium} = useContext(AuthContext);
     const [selectedtDate, setSelectedDate] = useState(new Date());
@@ -107,7 +111,7 @@ const totalInvestment = calculateTotalIncomeByCategory('Investment');
     const totalFoodExpense = calculateTotalExpenseByCategory('Food');
     const totalRentExpense = calculateTotalExpenseByCategory('Rent');
     const totalShoppingExpense = calculateTotalExpenseByCategory('Shopping');
-    const totalEntertainmentExpense = calculateTotalExpenseByCategory('Entertainment');
+    const totalEntertainmentExpense = calculateTotalExpenseByCategory('Entertain');
     const totalTransportExpense = calculateTotalExpenseByCategory('Transport');
 
     const calculateTotalExpense = () => {
@@ -119,8 +123,8 @@ const totalInvestment = calculateTotalIncomeByCategory('Investment');
       return totalExpense;
     };
     return (
-<ScrollView>
-<SafeAreaView style={styles.container}>
+<SafeAreaView style={[styles.container, { flex: 1, height: windowHeight }]}>
+  <ScrollView style={{ flex: 1 }}>
     <LinearGradient
                     colors={['#FDCEDF', '#BEADFA']}
                     style={styles.header}
@@ -198,9 +202,11 @@ const totalInvestment = calculateTotalIncomeByCategory('Investment');
         <Text>No income</Text>
       )}
     </View>
+  
   </LinearGradient>
-</SafeAreaView>
+  {/* <View style = {{marginBottom: 60}}></View> */}
 </ScrollView>
+</SafeAreaView>
 );
 };
 
@@ -216,8 +222,6 @@ header:{
   borderTopRightRadius: 50,
   paddingHorizontal: 20,
   paddingVertical: 20,
-  // borderBottomLeftRadius: 20,
-  // borderBottomRightRadius: 20,
 },
 textheader:{
   backgroundColor: '#ffffff',
@@ -275,13 +279,9 @@ expenseRow: {
 },
 expenseCategory: {
   flex: 1,
-  // marginRight: 130,
-  // justifyContent: 'space-between',
-  // alignItems: 'center',
 },
 expenseDetails: {
   flex: 1,
-  // flexDirection: 'column',
   marginLeft: 170,
 },
 divider: {

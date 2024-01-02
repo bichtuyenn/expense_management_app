@@ -13,7 +13,7 @@ const data = [
   { label: 'Food', value: '0' },
   { label: 'Rent', value: '0' },
   { label: 'Shopping', value: '0'},
-  { label: 'Entertainment', value: '0' },
+  { label: 'Entertain', value: '0' },
   { label: 'Transport', value: '0'}
 ];
   const AddExpenses = ({ navigation }) => {
@@ -32,8 +32,8 @@ const data = [
         'Food': 0,
         'Rent': 0,
         'Shopping': 0,
-        'Entertainment': 0,
-        'Transportation': 0,
+        'Entertain': 0,
+        'Transport': 0,
       };
       
       useEffect(() => {

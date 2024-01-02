@@ -48,6 +48,7 @@ const Signup = () => {
           console.log('Dữ liệu nhận được sau khi gửi POST request:', response.data);
           setIsValidPassword(!isValidPassword);
           setIsValidPassword2(!isValidPassword2);
+          navigation.goBack();
         })
         .catch((error) => {
           setIsValidPassword(!isValidPassword);
@@ -163,7 +164,7 @@ export default Signup;
 const styles = StyleSheet.create({
   container: {
     flex: 1, 
-    backgroundColor: '#BEADFA'
+    backgroundColor: '#BEADFA',
   },
   header: {
       flex: 1,

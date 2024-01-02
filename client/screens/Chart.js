@@ -8,7 +8,7 @@ import { AuthContext } from './AuthContext';
 const defaultColors = {
   Food: "#F8EDFF",
   Transport: "#D8D9DA",
-  Entertainment: "#BACDDB",
+  Entertain: "#BACDDB",
   Shopping: "#6096B4",
   Rent: "#205375",
 };
